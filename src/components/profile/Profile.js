@@ -13,19 +13,21 @@ function Profile() {
   useEffect( async () => {
     await api.get(cvsuID)
     .then(response => {
-      console.log('response : ', response.data)
+      var ror = response.data
+      console.log('res : ',ror[0].userinfo_fname)
       setUserData(response.data)
+      document.getElementById("firstname").value = ror[0].userinfo_fname
+      document.getElementById("middlename").value = ror[0].userinfo_mname
+      document.getElementById("lastname").value = ror[0].userinfo_lname
+      document.getElementById("gender").value = ror[0].userinfo_gender
+      document.getElementById("emailaddress").value = ror[0].userinfo_email
+      document.getElementById("mobilenumber").value = ror[0].userinfo_number
+      document.getElementById("designation").value = ror[0].userinfo_designation
     })
     .catch((err) => {
       console.log('error : ',err.response.data)
     })
-    document.getElementById("firstname").value = userData ? userData[0].userinfo_fname : ''
-    document.getElementById("middlename").value = userData ? userData[0].userinfo_mname : ''
-    document.getElementById("lastname").value = userData ? userData[0].userinfo_lname : ''
-    document.getElementById("gender").value = userData ? userData[0].userinfo_gender : ''
-    document.getElementById("emailaddress").value = userData ? userData[0].userinfo_email : ''
-    document.getElementById("mobilenumber").value = userData ? userData[0].userinfo_number : ''
-    document.getElementById("designation").value = userData ? userData[0].userinfo_designation : ''
+    
   },[])
 
   // change photo
@@ -162,7 +164,6 @@ function Profile() {
               <div className="form-group" style={{ color: "rgb(255,255,255)" }}>
                 <button
                   className="btn btn-sm"
-                  type="button"
                   style={{ background: "#75a478", color: "rgb(255,255,255)" }}
                   onClick={usersave}
                 >
@@ -231,7 +232,6 @@ function Profile() {
                   <div className="form-group">
                     <button
                       className="btn btn-sm"
-                      type="button"
                       onClick = {contactsave}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
                     >
