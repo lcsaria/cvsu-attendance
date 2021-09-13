@@ -15,6 +15,7 @@ function Home() {
       .then((response) => {
         console.log(JSON.stringify(response.data))
         alert('welcome!')
+        localStorage.setItem('cvsuID',cvsuID)
         window.location.href='/dashboard';
       })
       .catch((err) => 
@@ -51,7 +52,7 @@ function Home() {
                         <div className="form-group">
                           <input
                             className="form-control form-control-user"
-                            type="number"
+                            type="text"
                             id="exampleInputEmail"
                             aria-describedby="emailHelp"
                             placeholder="Enter CvSU ID"

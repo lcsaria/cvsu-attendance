@@ -1,10 +1,99 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import Top from '../template/Top'
-
+import api from '../../api/axios'
+var timecheck = false
 function Dashboard() {
+  var today = new Date()
+  var dateTxt = ""
+  var datelong = ""
+  const [cvsuID, setcvsuID] = useState( localStorage.getItem('cvsuID') || '')
+  const [userData, setUserData] = useState('')
+  const [timetxt, setTimetxt] = useState('')
+  const [timeintxt, setTimeintxt] = useState('TIME IN')
+  const [timeIn, setTimeIn] = useState('')
+
+  // get time text
+  const getTime = () => {
+    var time = today.getHours()
+    if (time >= 0 && time <= 11) setTimetxt("Morning, ")
+    else if (time >= 12 && time <= 18) setTimetxt("Afternoon, ")
+    else if (time >= 19 && time <= 23) setTimetxt("Evening, ")
+  }
+
+  // get date today.
+  const getnow = () => {
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    console.log(date)
+  }
+
+  const getUserTime = () => {
+    api.get(`attendance/${cvsuID}`)
+    .then(response => {
+      console.log('response : ', response.data)
+      setTimeIn(response.data)
+    })
+    .catch((err) => {
+      console.log('error : ',err.response.data)
+    })
+  }
+
+  // react hooks for preload data.
+  useEffect( async () => {
+    // get data
+    await api.get(cvsuID)
+    .then(response => {
+      console.log('response : ', response.data)
+      setUserData(response.data)
+    })
+    .catch((err) => {
+      console.log('error : ',err.response.data)
+    })
+
+    // get time
+    
+    getUserTime()
+    getTime()
+    getnow()
+  },[])
+
+
+
+  // time in or out 
+  const timeInorOut = async () => {
+    if (!timecheck) {
+      console.log("TIME IN!", timecheck)
+      await api.post(`attendance/${cvsuID}`)
+      .then(response => {
+        timecheck = true
+        setTimeintxt("TIME OUT")
+        alert("Time in success!")
+        getUserTime()
+      })
+      .catch((err) => {
+        alert(err.response.data)
+      })
+      return
+    }
+    if (timecheck){
+
+      await api.put(`attendance/${cvsuID}`)
+      .then(response => {
+        setTimeintxt("TIME IN")
+        timecheck = false
+        alert("Time out success!")
+        getUserTime()
+      })
+      .catch((err) => {
+        alert(err.response.data)
+      })
+      
+      console.log("TIME OUT!", timecheck)
+      return
+    }
+  }
 
 return (
 <div id="wrapper">
@@ -25,7 +114,7 @@ return (
           }}
         >
           <div className="card-body">
-            <h3>Good morning Kaguya!</h3>
+            <h3>Good {timetxt} {userData? userData[0].userinfo_fname + ' ' + userData[0].userinfo_lname + ' !' : 'User!'}</h3>
             <hr />
             <h4>Tuesday | September 07, 2021</h4>
           </div>
@@ -54,8 +143,9 @@ return (
                     color: "rgb(255,255,255)",
                     fontSize: 40
                   }}
+                  onClick={timeInorOut}
                 >
-                  TIME IN
+                  {timeintxt}
                 </button>
               </div>
             </div>
@@ -63,9 +153,9 @@ return (
           <div className="col-md-6">
             <div className="card" style={{ boxShadow: "-3px 4px 10px" }}>
               <div className="card-body" style={{ boxShadow: "0px 0px" }}>
-                <h3>Time in : --:-- AM</h3>
+                <h3>Time in : {timeIn ? timeIn[0].timein : '--:--'}</h3>
                 <hr />
-                <h3>Time out : --:-- PM</h3>
+                <h3>Time out : {timeIn ? timeIn[0].timeout : '--:--'}</h3>
               </div>
             </div>
           </div>
