@@ -1,6 +1,7 @@
 import React from 'react'
 
 function Home() {
+
     return (
     <div className="bg-gradient-primary" style={{background: "#75a478"}}>
         <div className="container" style={{ marginTop: 150 }}>
@@ -23,7 +24,7 @@ function Home() {
                       <div className="text-center">
                         <h4 className="text-dark mb-4">Welcome Back!</h4>
                       </div>
-                      <form className="user">
+                      <form className="user" >
                         <div className="form-group">
                           <input
                             className="form-control form-control-user"

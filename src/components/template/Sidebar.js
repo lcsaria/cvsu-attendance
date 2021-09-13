@@ -3,7 +3,7 @@ import logo from '../../assets/school-logo.png'
 
 
 function Sidebar() {
-    const [isOpen, setIsOpen] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     const onClickButton = () => {
       if (isOpen){
@@ -13,10 +13,12 @@ function Sidebar() {
       }
     }
 
+    const toggled = (isOpen ? "toggled" : " ");
 
+    
     return (
         <nav
-        className="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0"
+        className={`navbar navbar-dark align-items-start sidebar ${toggled} sidebar-dark accordion bg-gradient-primary p-0`}
         style={{ background: "#a5d6a7"}}
         >
         <div className="container-fluid d-flex flex-column p-0">
