@@ -1,6 +1,29 @@
-import React from 'react'
+import React, { useState }from 'react'
+import api from '../../api/axios';
 
 function Home() {
+    const [cvsuID, setcvsuID] = useState('');
+    const [password, setPassword] = useState('');
+
+    const login = () => {
+      console.log(cvsuID+ " -> "+password)
+      if (!cvsuID) return alert('please enter cvsu ID!')
+      if (!password) return alert('please enter password!')
+      console.log("try")
+      //api 
+      api.get(`login/${cvsuID}/${password}`)
+      .then((response) => {
+        console.log(JSON.stringify(response.data))
+        alert('welcome!')
+        window.location.href='/dashboard';
+      })
+      .catch((err) => 
+      {
+        console.log(err.response.data)
+        alert("Incorrect CvSU ID / Pin")
+        return
+      })
+    }
 
     return (
     <div className="bg-gradient-primary" style={{background: "#75a478"}}>
@@ -24,15 +47,16 @@ function Home() {
                       <div className="text-center">
                         <h4 className="text-dark mb-4">Welcome Back!</h4>
                       </div>
-                      <form className="user" >
+                      { /*<form className="user"> */ }
                         <div className="form-group">
                           <input
                             className="form-control form-control-user"
-                            type="email"
+                            type="number"
                             id="exampleInputEmail"
                             aria-describedby="emailHelp"
                             placeholder="Enter CvSU ID"
                             name="cvsuid"
+                            onChange={(e)=>setcvsuID(e.target.value)}
                             autoFocus
                           />
                         </div>
@@ -44,6 +68,8 @@ function Home() {
                             placeholder="4 Digit Pin"
                             name="password"
                             inputMode="numeric"
+                            maxLength="4"
+                            onChange={(e)=>setPassword(e.target.value)}
                           />
                         </div>
                         <div className="form-group">
@@ -63,15 +89,16 @@ function Home() {
                             </div>
                           </div>
                         </div>
-                        <a
+                        <button
+                          onClick={login}
                           className="btn btn-success btn-block text-white btn-user"
-                          role="button"
-                          href="/dashboard"
+                          //role="button"
+                          //href="/dashboard"
                         >
                           Login
-                        </a>
+                        </button>
                         <hr />
-                      </form>
+                      {/*</form> */}
                     </div>
                   </div>
                 </div>
