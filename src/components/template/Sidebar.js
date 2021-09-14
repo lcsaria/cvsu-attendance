@@ -1,137 +1,86 @@
 import React from 'react'
-import logo from '../../assets/school-logo.png'
 
 
 function Sidebar() {
-    const [isOpen, setIsOpen] = React.useState(false);
+  const sidebarCollapsed = localStorage.getItem('sidebar-collapsed');
+  const [isExpanded, setIsExpanded] = React.useState(sidebarCollapsed ? false : true);
 
-    const onClickButton = () => {
-      if (isOpen){
-        setIsOpen(false);
-      } else {
-        setIsOpen(true);
-      }
+
+  const handleToggler = () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+      localStorage.setItem('sidebar-collapsed', true);
+      return;
     }
-
-    const toggled = (isOpen ? "toggled" : " ");
-
-    
-    return (
-        <nav
-        className={`navbar navbar-dark align-items-start sidebar ${toggled} sidebar-dark accordion bg-gradient-primary p-0`}
-        style={{ background: "#a5d6a7"}}
-        >
-        <div className="container-fluid d-flex flex-column p-0">
-          <a
-            className="navbar-brand d-flex justify-content-center align-items-center sidebar-brand"
-            href="/dashboard"
-            style={{ width: 90}}
-          >
-            <div className="ml-1">
-              <img
-                alt="cvsu"
-                src={logo}
-                width="100px"
-              />
-            </div>
-            <div className="sidebar-brand-text">
-              <span style={{ color: "rgb(0,0,0)", position:"relative", right:"15px"}}>CvSu - Generals</span>
-            </div>
-          </a>
-          <hr className="sidebar-divider my-0" />
-          <ul className="navbar-nav text-light" id="accordionSidebar">
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                href="/dashboard"
-                style={{ fontSize: "20.6px" }}
-              >
-                <i
-                  className="fa fa-home"
-                  style={{ fontSize: "20.6px", color: "rgb(0,0,0,0.3)" }}
-                />
-                <span style={{ color: "rgb(0,0,0)" }}>Home</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/profile">
-                <i
-                  className="fas fa-user"
-                  style={{ color: "rgba(0,0,0,0.3)", fontSize: "20.6px" }}
-                />
-                <span style={{ color: "rgba(0,0,0,0.8)", fontSize: "20.6px" }}>
-                  Profile
-                </span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/history">
-                <i
-                  className="fa fa-calendar"
-                  style={{ color: "rgba(0,0,0,0.3)", fontSize: "20.6px" }}
-                />
-                <span style={{ color: "rgba(0,0,0,0.8)", fontSize: "20.6px" }}>
-                  History
-                </span>
-              </a>
-            </li>
-            <li className="nav-item" />
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                href="/add-user"
-                style={{ fontSize: "20.6px" }}
-              >
-                <i
-                  className="fa fa-user-plus"
-                  style={{ color: "rgba(0,0,0,0.3)", fontSize: "20.6px" }}
-                />
-                <span style={{ color: "rgba(0,0,0,0.8)" }}>Add User</span>
-              </a>
-              <a
-                className="nav-link"
-                href="/manage-user"
-                style={{ fontSize: "20.6px" }}
-              >
-                <i
-                  className="fa fa-users"
-                  style={{ color: "rgba(0,0,0,0.3)", fontSize: "20.6px" }}
-                />
-                <span style={{ color: "rgba(0,0,0,0.8)" }}>Manage User</span>
-              </a>
-              <a
-                className="nav-link"
-                href="/reports"
-                style={{ fontSize: "20.6px" }}
-              >
-                <i
-                  className="fa fa-table"
-                  style={{ color: "rgba(0,0,0,0.3)", fontSize: "20.6px" }}
-                />
-                <span style={{ color: "rgba(0,0,0,0.8)" }}>Reports</span>
-              </a>
-            </li>
-          </ul>
-          <div className="text-center">
-            <button
-              className="btn rounded-circle"
-              type="button"
-              onClick={onClickButton}
-            >
-                
-              {
-                isOpen ? 
-                <i className="fas fa-chevron-left"/>
-                :
-                <i className="fas fa-chevron-right"/>
-              }
-              
-              
-            </button>
-          </div>
+    setIsExpanded(true);
+    localStorage.removeItem('sidebar-collapsed');
+  }
+  
+  return(
+    <div 
+      className={isExpanded ? "Sidebar sidebar-text" : "Sidebar sidebar-text collapsed"}>
+      <div className="sidebar-header">
+        <i className="fas fa-bars sidebar-icon" onClick={handleToggler}/>
+        <h2 className="sidebar-logo ml-2">CvSU-Gentri</h2>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/dashboard">  
+          <i className="fas fa-home mr-1"/>
+              <span className="sidebar-text">Home</span>
+            </a>
         </div>
-      </nav>
-    )
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/profile">  
+          <i className="fas fa-user mr-1"/>
+              <span className="sidebar-text">Profile</span>
+            </a>
+        </div>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/history">  
+          <i className="fas fa-calendar mr-1"/>
+              <span className="sidebar-text">History</span>
+            </a>
+        </div>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/add-user">  
+          <i className="fas fa-user-plus mr-1"/>
+              <span className="sidebar-text">Add User</span>
+            </a>
+        </div>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/manage-user">  
+          <i className="fas fa-users mr-1"/>
+              <span className="sidebar-text">Manage User</span>
+            </a>
+        </div>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/reports">  
+          <i className="fas fa-table mr-1"/>
+              <span className="sidebar-text">Report</span>
+            </a>
+        </div>
+      </div>
+      <div className="sidebar-items">
+        <div className="item">
+        <a className="nav-link" href="/dashboard">  
+          <i className="fas fa-sign-out mr-1"/>
+              <span className="sidebar-text">Log-out</span>
+            </a>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Sidebar
