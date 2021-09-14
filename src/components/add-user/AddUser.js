@@ -1,31 +1,87 @@
 import React from 'react'
+import { useState } from 'react/cjs/react.development'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import Top from '../template/Top'
+import api from '../../api/axios'
 
 function AddUser() {
 const gen = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" }
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" }
 ]
 
 const dept = [
-  { label: "Department of Information Technology", value: "DIT" },
-  { label: "Dapartment of Management", value: "DOM" }
+  { label: "Department of Information Technology", value: "Department of Information Technology" },
+  { label: "Department of Management", value: "Department of Management" },
+  { label: "Department of Arts and Sciences", value: "Department of Arts and Sciences" },
+  { label: "Department of Hospitality and Tourism Studies", value: "Department of Hospitality and Tourism Studie" },
+  { label: "Department of Psychology", value: "Department of Psychology" },
+  { label: "Department of Teacher Education", value: "Department of Teacher Education" },
+  { label: "Admin Office", value: "Admin Office" },
 ]
 
 
 const [gender, setGender] = React.useState("");
 const [department, setDepartment] = React.useState("");
+const [data, setData] = useState({
+  cvsu_id: '',
+  password: '',
+  userinfo_fname: '',
+  userinfo_mname: '',
+  userinfo_lname: '',
+  userinfo_gender: '',
+  userinfo_designation: '',
+  userinfo_email: '',
+  userinfo_department: '',
+  userinfo_number : '',
+})
 
 let handleGenderChange = (e) => {
-  setGender(e.target.value)
 }
 
 let handleDepartmentChange = (e) => {
   setDepartment(e.target.value)
 }
+
+const submit = async (e) => {
+  e.preventDefault();
+  if (!data.userinfo_fname || !data.userinfo_lname || !data.userinfo_email || !data.userinfo_number || !data.userinfo_designation) 
+  return alert("please fill all field with *")
+  var gender = document.getElementById('userinfo_gender').value
+  var department = document.getElementById('userinfo_department').value
+  console.log('test gender : ', gender)
+  console.log('test department : ', department)
+  // CONNECT TO API
+  await api.post('',{
+    cvsu_id: data.cvsu_id,
+    userinfo_fname: data.userinfo_fname,
+    userinfo_mname: data.userinfo_mname,
+    userinfo_lname: data.userinfo_lname,
+    userinfo_gender: gender,
+    userinfo_designation: data.userinfo_designation,
+    userinfo_email: data.userinfo_email,
+    userinfo_department: department,
+    userinfo_number : data.userinfo_mname,
+  })
+  .then(res => {
+    console.log('response : ',res.data)
+    alert('User Added Successful!')
+  })
+  .catch((err) => {
+    console.log('error : ', err)
+  })
+
+}
+
+const handle = (e) => {
+  const newdata = { ...data }
+  newdata[e.target.id] = e.target.value
+  setData(newdata)
+  console.log(newdata)
+}
+
 
 return (
 <div id="wrapper">
@@ -46,36 +102,38 @@ return (
   </div>
   <div className="card shadow">
     <div className="card-body">
-      <form>
+      <form onSubmit={(e) => submit(e)}>
         <h4>Login details</h4>
         <hr />
         <div className="form-row">
           <div className="col-md-6">
             <div className="form-group">
-              <label htmlFor="address">
-                <strong>CvSU ID Number&nbsp;</strong>
+              <label htmlFor="cvsuidnumber">
+                <strong>CvSU ID Number*&nbsp;</strong>
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="address"
-                placeholder="1234567890"
-                name="address"
+                id="cvsu_id"
+                placeholder="CvSU ID Number"
+                name="cvsuidnumber"
               />
             </div>
           </div>
           <div className="col-md-6">
             <div className="form-group">
-              <label htmlFor="address">
-                <strong>4 Digit Pin Code</strong>
+              <label htmlFor="pincode">
+                <strong>4 Digit Pin Code*</strong>
                 <br />
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="address"
+                id="password"
                 placeholder="0000"
-                name="address"
+                name="pincode"
               />
             </div>
           </div>
@@ -85,119 +143,125 @@ return (
         <div className="form-row">
           <div className="col-lg-6">
             <div className="form-group">
-              <label htmlFor="city">
-                <strong>First Name</strong>
+              <label htmlFor="firstname">
+                <strong>First Name*</strong>
                 <br />
               </label>
               <input
+               onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="city"
-                placeholder="Juan"
-                name="city"
+                id="userinfo_fname"
+                placeholder="First Name"
+                name="firstname"
               />
             </div>
           </div>
           <div className="col-lg-6">
             <div className="form-group">
-              <label htmlFor="country">
+              <label htmlFor="middlename">
                 <strong>Middle Name</strong>
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="country"
-                placeholder="Dela"
-                name="country"
+                id="userinfo_mname"
+                placeholder="Middle Name"
+                name="middlename"
               />
             </div>
           </div>
           <div className="col-lg-6 col-xl-6">
             <div className="form-group">
-              <label htmlFor="country">
-                <strong>Last Name</strong>
+              <label htmlFor="lastname">
+                <strong>Last Name*</strong>
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="country-1"
-                placeholder="Cruz"
-                name="country"
+                id="userinfo_lname"
+                placeholder="Last Name"
+                name="lastname"
               />
             </div>
           </div>
           <div className="col-lg-6">
             <div className="form-group">
-              <label htmlFor="country">
+              <label htmlFor="gender">
                 <strong>Gender</strong>
               </label>
               <div className="dropdown">
-              <select className="form-control" onChange={handleGenderChange}> 
-                <option value={gender} id="gender"> -- </option>
+              <select className="form-control" id="userinfo_gender" onChange={handleGenderChange}> 
+                  {/*<option value={gender} id="gender"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
                   */}
-                {gen.map((gender) => <option value={gender.value}>{gender.label}</option>)}
+                {gen.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
               </select>
               </div>
             </div>
           </div>
           <div className="col-lg-6">
             <div className="form-group">
-              <label htmlFor="country">
-                <strong>Email Address</strong>
+              <label htmlFor="emailaddress">
+                <strong>Email Address*</strong>
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
-                type="text"
-                id="country-4"
-                placeholder="juan.delacruz@cvsu.edu.ph"
-                name="country"
+                type="email"
+                id="userinfo_email"
+                placeholder="user@cvsu.edu.ph"
+                name="emailaddress"
               />
             </div>
           </div>
           <div className="col-lg-6">
             <div className="form-group">
-              <label htmlFor="country">
+              <label htmlFor="department">
                 <strong>Department</strong>
                 <br />
               </label>
               <div className="dropdown">
-              <select className="form-control" onChange={handleDepartmentChange}> 
-                <option value={department} name="gender"> -- </option>
+              <select className="form-control" id="userinfo_department" onChange={handleDepartmentChange}> 
+                {/*<option value={department} id="department" name="department"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
                   */}
-                {dept.map((department) => <option key={department.value} value={department.value}>{department.label}</option>)}
+                {dept.map((department) => <option  key={department.value} value={department.value}>{department.label}</option>)}
               </select>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-xl-6">
             <div className="form-group">
-              <label htmlFor="country">
-                <strong>Contact Number</strong>
+              <label htmlFor="contactnumber">
+                <strong>Contact Number*</strong>
               </label>
               <input
+               onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="country-2"
+                id="userinfo_number"
                 placeholder="09123456789"
-                name="country"
+                name="contactnumber"
               />
             </div>
           </div>
           <div className="col">
             <div className="form-group">
-              <label htmlFor="country">
-                <strong>Designation</strong>
+              <label htmlFor="designation">
+                <strong>Designation*</strong>
               </label>
               <input
+                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="country-3"
-                placeholder="Computer Programmer 1"
-                name="country"
+                id="userinfo_designation"
+                placeholder="Designation"
+                name="designation"
               />
             </div>
           </div>
