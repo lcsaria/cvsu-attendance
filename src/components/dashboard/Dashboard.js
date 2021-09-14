@@ -34,13 +34,17 @@ function Dashboard() {
     .then(response => {
       console.log('response : ', response.data)
       setTimeIn(response.data)
-      timecheck = true
-      setTimeintxt('TIME OUT')
+      if (!response.data[0].timeout){
+        setTimeintxt("TIME OUT")
+        timecheck = true
+      }
+      else{
+        setTimeintxt("TIME IN")
+        timecheck = false
+      }
     })
     .catch((err) => {
       console.log('error : ',err.response.data)
-      timecheck = false
-      setTimetxt('TIME IN')
     })
   }
 

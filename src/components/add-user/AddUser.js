@@ -45,9 +45,22 @@ let handleDepartmentChange = (e) => {
   setDepartment(e.target.value)
 }
 
+const submitlogin = async (e) => {
+  await api.post('addlogin',{
+    cvsu_id: data.cvsu_id,
+    password: data.password,
+  })
+  .then(res => {
+    console.log('response : ', res.data)
+  })
+  .catch((err) => {
+    console.log('error : ', err)
+  })
+}
+
 const submit = async (e) => {
   e.preventDefault();
-  if (!data.userinfo_fname || !data.userinfo_lname || !data.userinfo_email || !data.userinfo_number || !data.userinfo_designation) 
+  if (!data.userinfo_fname || !data.userinfo_lname || !data.userinfo_email || !data.userinfo_number || !data.userinfo_designation || !data.cvsu_id || !data.password) 
   return alert("please fill all field with *")
   var gender = document.getElementById('userinfo_gender').value
   var department = document.getElementById('userinfo_department').value
@@ -67,12 +80,15 @@ const submit = async (e) => {
   })
   .then(res => {
     console.log('response : ',res.data)
+    submitlogin()
     alert('User Added Successful!')
   })
   .catch((err) => {
     console.log('error : ', err)
+    alert('User already exist!')
+    return
   })
-
+  
 }
 
 const handle = (e) => {
@@ -130,7 +146,8 @@ return (
               <input
                 onChange={(e) => handle(e)}
                 className="form-control"
-                type="text"
+                type="password"
+                maxLength="4"
                 id="password"
                 placeholder="0000"
                 name="pincode"
