@@ -73,7 +73,7 @@ function Sidebar() {
       </div>
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/dashboard">  
+        <a className="nav-link" href="/login">  
           <i className="fas fa-sign-out mr-1"/>
               <span className="sidebar-text">Log-out</span>
             </a>
