@@ -3,10 +3,10 @@ import React from 'react'
 function Navbar() {
     return (
     <nav
-        className="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"
-        style={{ boxShadow: "0px 4px 10px" }}
+        className="navbar navbar-light navbar-expand bg-white shadow mb-5 topbar static-top"
+        style={{ boxShadow: "0px 4px 5px", height: "5%"}}
       >
-        <div className="container">
+        <div className="container" >
           <ul className="navbar-nav flex-nowrap ml-auto">
             <div className="d-none d-sm-block topbar-divider" />
             <li className="nav-item dropdown no-arrow">

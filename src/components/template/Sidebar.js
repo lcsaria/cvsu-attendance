@@ -22,63 +22,64 @@ function Sidebar() {
       <div className="sidebar-header">
         <i className="fas fa-bars sidebar-icon" onClick={handleToggler}/>
         <h2 className="sidebar-logo ml-2">CvSU-Gentri</h2>
+        <br className="line"/>
       </div>
+      <a className="nav-link" href="/dashboard">  
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/dashboard">  
           <i className="fas fa-home mr-1"/>
-              <span className="sidebar-text">Home</span>
-            </a>
+          <span className="sidebar-text">Home</span>
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/profile"> 
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/profile">  
           <i className="fas fa-user mr-1"/>
-              <span className="sidebar-text">Profile</span>
-            </a>
+          <span className="sidebar-text">Profile</span>   
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/history">  
       <div className="sidebar-items">
-        <div className="item">
-        <a className="nav-link" href="/history">  
+        <div className="item">   
           <i className="fas fa-calendar mr-1"/>
-              <span className="sidebar-text">History</span>
-            </a>
+          <span className="sidebar-text">History</span>
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/add-user">  
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/add-user">  
           <i className="fas fa-user-plus mr-1"/>
-              <span className="sidebar-text">Add User</span>
-            </a>
+          <span className="sidebar-text">Add User</span>
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/manage-user">  
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/manage-user">  
           <i className="fas fa-users mr-1"/>
-              <span className="sidebar-text">Manage User</span>
-            </a>
+          <span className="sidebar-text">Manage User</span>
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/reports">  
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/reports">  
           <i className="fas fa-table mr-1"/>
-              <span className="sidebar-text">Report</span>
-            </a>
+          <span className="sidebar-text">Report</span>
         </div>
       </div>
+      </a>
+      <a className="nav-link" href="/login"> 
       <div className="sidebar-items">
         <div className="item">
-        <a className="nav-link" href="/login">  
           <i className="fas fa-sign-out mr-1"/>
-              <span className="sidebar-text">Log-out</span>
-            </a>
+          <span className="sidebar-text">Log-out</span>
         </div>
       </div>
+      </a>
     </div>
   );
 }
