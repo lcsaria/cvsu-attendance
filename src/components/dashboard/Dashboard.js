@@ -14,6 +14,7 @@ function Dashboard() {
   const [timetxt, setTimetxt] = useState('')
   const [timeintxt, setTimeintxt] = useState('TIME IN')
   const [timeIn, setTimeIn] = useState('')
+  const [attendance, setAttendance] = useState([])
 
   // get time text
   const getTime = () => {
@@ -44,7 +45,7 @@ function Dashboard() {
       }
     })
     .catch((err) => {
-      console.log('error : ',err.response.data)
+      console.log('error : ',err)
     })
   }
 
@@ -57,9 +58,17 @@ function Dashboard() {
       setUserData(response.data)
     })
     .catch((err) => {
-      console.log('error : ',err.response.data)
+      console.log('error : ',err)
     })
 
+    await api.get(`attendance/getuser/${cvsuID}`)
+    .then (response => {
+      console.log('attendance data : ',response.data)
+      setAttendance(response.data)
+    })
+    .catch((err) => {
+      console.log('error at : ',err)
+    })
     // get time
     
     getUserTime()
@@ -103,6 +112,18 @@ function Dashboard() {
     }
   }
 
+  const renderTable = () => {
+    return attendance.map(user => {
+      return ( 
+        <tr key = {user.id}>
+          <td>{user.date}</td>
+          <td>{user.timein}</td>
+          <td>{user.timeout}</td>
+        </tr>
+      )
+    })
+  }
+
 return (
 <div id="wrapper">
   <Sidebar/>
@@ -122,7 +143,7 @@ return (
           }}
         >
           <div className="card-body">
-            <h3>Good {timetxt} {userData? userData[0].userinfo_fname + ' ' + userData[0].userinfo_lname + ' !' : 'User!'}</h3>
+            <h3>Good {timetxt || 'Day,'} {userData? userData[0].userinfo_fname + ' ' + userData[0].userinfo_lname + ' !' : 'User!'}</h3>
             <hr />
             <h4>Tuesday | September 07, 2021</h4>
           </div>
@@ -182,117 +203,13 @@ return (
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                    <th>Column 2</th>
+                    <th>Date</th>
+                    <th>Time in</th>
+                    <th>Time out</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
+                  {renderTable()}
                 </tbody>
               </table>
             </div>

@@ -25,7 +25,7 @@ function Profile() {
       document.getElementById("designation").value = ror[0].userinfo_designation
     })
     .catch((err) => {
-      console.log('error : ',err.response.data)
+      console.log('error : ',err)
     })
     
   },[])

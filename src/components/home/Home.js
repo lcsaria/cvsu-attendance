@@ -13,7 +13,7 @@ function Home() {
       console.log("try")
       //api 
       api.get(`login/${cvsuID}/${password}`)
-      .then((response) => {
+      .then(response => {
         console.log(JSON.stringify(response.data))
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
