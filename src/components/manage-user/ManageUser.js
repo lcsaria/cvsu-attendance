@@ -4,18 +4,21 @@ import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import Top from '../template/Top'
 import api from '../../api/axios'
+import * as ReactBootstrap from 'react-bootstrap';
 // import { useFormState } from 'react-hook-form'
 
 function ManageUser() {
   //const cvsuID = localStorage.getItem('cvsuID') || ''
   const [data, setData] = useState([]);
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const retrieve = async () => {
       await api.get('')
       .then(response => {
         console.log('response : ', response.data)
         setData(response.data)
+        setLoading(true);
       })
       .catch((err) => {
         console.log('error : ',err)
@@ -74,6 +77,7 @@ function ManageUser() {
         </h4>
       </div>
     </div>
+    
     <div className="card shadow">
       <div className="card-body">
         <div className="row">
@@ -117,7 +121,11 @@ function ManageUser() {
               </tr>
             </thead>
             <tbody>
-            {renderTable()}
+            {loading ? (
+              renderTable()
+              ) : (
+              <ReactBootstrap.Spinner animation="border"/>
+              )}
             </tbody>
             <tfoot>
               <tr />
