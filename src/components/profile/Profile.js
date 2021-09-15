@@ -5,8 +5,7 @@ import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
 import Top from '../template/Top'
 import api from '../../api/axios'
-const editcheck = false
-
+var editcheck = true;
 function Profile() {
   const cvsuID = localStorage.getItem('cvsuID') || ''
   const [userData, setUserData] = useState('')
@@ -39,6 +38,14 @@ function Profile() {
   const changePhoto = () => {
     alert("This function is not available right now.")
   }
+  const changestats = () => {
+    document.getElementById("firstname").readOnly = editcheck
+    document.getElementById("middlename").readOnly = editcheck
+    document.getElementById("lastname").readOnly = editcheck
+    document.getElementById("gender").readOnly = editcheck
+    document.getElementById("emailaddress").readOnly = editcheck
+    document.getElementById("mobilenumber").readOnly = editcheck
+  }
 
   // save user info
   const usersave = () => {
@@ -46,7 +53,11 @@ function Profile() {
     let mname = document.getElementById("middlename").value
     let lname = document.getElementById("lastname").value
     let gender = document.getElementById("gender").value
-    
+    let email = document.getElementById("emailaddress").value
+    let number = document.getElementById("mobilenumber").value
+    let designation = document.getElementById("designation").value
+    let department = document.getElementById("department").value
+
     const userdatasave = async () => {
       await api.put(`${cvsuID}`,{
         cvsu_id: cvsuID,
@@ -54,10 +65,18 @@ function Profile() {
         userinfo_mname: mname,
         userinfo_lname: lname,
         userinfo_gender: gender,
+        userinfo_email: email,
+        userinfo_number : number,
+        userinfo_designation: designation,
+        userinfo_department: department,
       })
       .then(response => {
         console.log('response : ', response.status)
         alert('User information updated successfully.')
+        editcheck = true
+        setEdit("Edit Information")
+        changestats()
+        console.log('save na this');
         window.location.reload(false) // reload
       })
       .catch((err) => {
@@ -65,38 +84,15 @@ function Profile() {
         alert(`Can't process your request. please try again later.`)
       })
     }
-    //userdatasave()
-    console.log('save na this');
+    userdatasave()
+    
   }
 
   // save contact info
   const goedit = () => {
-    let email = document.getElementById("emailaddress").value
-    let number = document.getElementById("mobilenumber").value
-    let designation = document.getElementById("designation").value
-    let department = document.getElementById("department").value
-    
-    /*const userdatasave = async () => {
-      await api.put(`${cvsuID}`,{
-        cvsu_id: cvsuID,
-        userinfo_email: email,
-        userinfo_number: number,
-        userinfo_designation: designation,
-        userinfo_department: department,
-      })
-      .then(response => {
-        console.log('response : ', response.data.message)
-        alert('Contact information updated successfully.')
-        //window.location.reload(false) // reload
-      })
-      .catch((err) => {
-        console.log('error : ', err)
-        alert(`Can't process your request. please try again later.`)
-      })
-    }
-    //userdatasave()
-
-    */
+    editcheck = false
+    setEdit("Save Changes")
+    changestats()
     console.log('pidi na mag edit');
   }
 
@@ -164,7 +160,8 @@ function Profile() {
                       type="text"
                       id="firstname"
                       placeholder="First Name"
-                      name="username"
+                      name="firstname"
+                      readOnly
                     />
                   </div>
                 </div>
@@ -178,7 +175,8 @@ function Profile() {
                       type="text"
                       id="middlename"
                       placeholder="Middle Name"
-                      name="email"
+                      name="middlename"
+                      readOnly
                     />
                   </div>
                 </div>
@@ -195,7 +193,8 @@ function Profile() {
                       type="text"
                       id="lastname"
                       placeholder="Last Name"
-                      name="first_name"
+                      name="lastname"
+                      readOnly
                     />
                   </div>
                 </div>
@@ -209,7 +208,7 @@ function Profile() {
                       type="text"
                       id="gender"
                       placeholder="Gender"
-                      name="last_name"
+                      name="gender"
                       readOnly
                     />
                   </div>
@@ -240,6 +239,7 @@ function Profile() {
                           id="emailaddress"
                           placeholder="user@cvsu.edu.ph"
                           name="address"
+                          readOnly
                         />
                       </div>
                     </div>
@@ -272,6 +272,7 @@ function Profile() {
                           id="mobilenumber"
                           placeholder="Mobile Number"
                           name="mobilenumber"
+                          readOnly
                         />
                       </div>
                     </div>
@@ -285,7 +286,7 @@ function Profile() {
                           type="text"
                           id="designation"
                           placeholder="Designation"
-                          name="country"
+                          name="designation"
                           readOnly
                         />
                       </div>
@@ -294,7 +295,7 @@ function Profile() {
                   <div className="form-group">
                     <button
                       className="btn btn-lg"
-                      onClick = {goedit}
+                      onClick = {editcheck? goedit : usersave}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
                     >
                       {edit}
