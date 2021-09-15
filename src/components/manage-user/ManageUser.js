@@ -4,12 +4,12 @@ import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import Top from '../template/Top'
 import api from '../../api/axios'
-import { useFormState } from 'react-hook-form'
+// import { useFormState } from 'react-hook-form'
 
 function ManageUser() {
   //const cvsuID = localStorage.getItem('cvsuID') || ''
-  const [data, setData] = useState([])
-
+  const [data, setData] = useState([]);
+  
   useEffect(() => {
     const retrieve = async () => {
       await api.get('')

@@ -1,8 +1,8 @@
 import React from 'react'
-
+import logo from '../../assets/school-logo-small.png'
 
 function Sidebar() {
-  const sidebarCollapsed = localStorage.getItem('sidebar-collapsed');
+  const sidebarCollapsed = localStorage.getItem('sidebar-collapsed' || true);
   const [isExpanded, setIsExpanded] = React.useState(sidebarCollapsed ? false : true);
 
 
@@ -20,14 +20,14 @@ function Sidebar() {
     <div 
       className={isExpanded ? "Sidebar sidebar-text" : "Sidebar sidebar-text collapsed"}>
       <div className="sidebar-header">
-        <i className="fas fa-bars sidebar-icon" onClick={handleToggler}/>
-        <h2 className="sidebar-logo ml-2">CvSU-Gentri</h2>
+        <i className="fas fa-bars sidebar-icon ml-1" onClick={handleToggler}/>
+        <img className="sidebar-logo" src={logo} alt="logo" width="30%"/>
         <br className="line"/>
       </div>
       <a className="nav-link" href="/dashboard">  
       <div className="sidebar-items">
         <div className="item">
-          <i className="fas fa-home mr-1"/>
+          <i className="fas fa-home mr-2"/>
           <span className="sidebar-text">Home</span>
         </div>
       </div>
