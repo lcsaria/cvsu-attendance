@@ -7,13 +7,24 @@ function Home() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const submit = (e) => {
+      setLoading(true);
+      if (!cvsuID) {
+        alert('please enter cvsu ID!')
+        setLoading(false);
+      } 
+      else if (!password) {
+        alert('please enter password!')
+        setLoading(false);
+      }
+      else { 
+        login(e);
+      }
+    }
 
     const login = (e) => {
       e.preventDefault();
-      setLoading(true);
       console.log(cvsuID+ " -> "+password)
-      if (!cvsuID) return alert('please enter cvsu ID!')
-      if (!password) return alert('please enter password!')
       console.log("try")
       //api 
       api.get(`login/${cvsuID}/${password}`)
@@ -28,6 +39,7 @@ function Home() {
       {
         console.log(err)
         alert("Incorrect CvSU ID / Pin")
+        setLoading(false);
         return
       })
     }
@@ -97,7 +109,7 @@ function Home() {
                           </div>
                         </div>
                         <button
-                          onClick={login}
+                          onClick={submit}
                           className="btn btn-success btn-block text-white btn-user"
                           disabled={loading}
                           //role="button"
