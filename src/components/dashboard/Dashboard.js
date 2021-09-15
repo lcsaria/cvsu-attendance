@@ -50,27 +50,32 @@ function Dashboard() {
   }
 
   // react hooks for preload data.
-  useEffect( async () => {
+  useEffect(() => {
     // get data
-    await api.get(cvsuID)
-    .then(response => {
-      console.log('response : ', response.data)
-      setUserData(response.data)
-    })
-    .catch((err) => {
-      console.log('error : ',err)
-    })
+    const retrieveall = async () => {
+      await api.get(cvsuID)
+      .then(response => {
+        console.log('response : ', response.data)
+        setUserData(response.data)
+      })
+      .catch((err) => {
+        console.log('error : ',err)
+      })
+    }
+    const retrieveuserattendance = async () => {
+      await api.get(`attendance/getuser/${cvsuID}`)
+      .then (response => {
+        console.log('attendance data : ',response.data)
+        setAttendance(response.data)
+      })
+      .catch((err) => {
+        console.log('error at : ',err)
+      })
+    }
 
-    await api.get(`attendance/getuser/${cvsuID}`)
-    .then (response => {
-      console.log('attendance data : ',response.data)
-      setAttendance(response.data)
-    })
-    .catch((err) => {
-      console.log('error at : ',err)
-    })
     // get time
-    
+    retrieveall()
+    retrieveuserattendance()
     getUserTime()
     getTime()
     getnow()

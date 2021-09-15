@@ -82,6 +82,7 @@ const submit = async (e) => {
     console.log('response : ',res.data)
     submitlogin()
     alert('User Added Successful!')
+    window.location.reload(false) // reload
   })
   .catch((err) => {
     console.log('error : ', err)

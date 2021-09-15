@@ -5,29 +5,34 @@ import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
 import Top from '../template/Top'
 import api from '../../api/axios'
+const editcheck = false
 
 function Profile() {
-  const [cvsuID, setcvsuID] = useState( localStorage.getItem('cvsuID') || '')
+  const cvsuID = localStorage.getItem('cvsuID') || ''
   const [userData, setUserData] = useState('')
-
-  useEffect( async () => {
-    await api.get(cvsuID)
-    .then(response => {
-      var ror = response.data
-      console.log('res : ',ror[0].userinfo_fname)
-      setUserData(response.data)
-      document.getElementById("firstname").value = ror[0].userinfo_fname
-      document.getElementById("middlename").value = ror[0].userinfo_mname
-      document.getElementById("lastname").value = ror[0].userinfo_lname
-      document.getElementById("gender").value = ror[0].userinfo_gender
-      document.getElementById("emailaddress").value = ror[0].userinfo_email
-      document.getElementById("mobilenumber").value = ror[0].userinfo_number
-      document.getElementById("designation").value = ror[0].userinfo_designation
-    })
-    .catch((err) => {
-      console.log('error : ',err)
-    })
-    
+  const [edit, setEdit] = useState('Edit Infomation')
+ 
+  useEffect(() => {
+    const retrievedata = async () => {
+      await api.get(cvsuID)
+      .then(response => {
+        var ror = response.data
+        console.log('res : ',ror[0].userinfo_fname)
+        setUserData(response.data)
+        document.getElementById("firstname").value = ror[0].userinfo_fname
+        document.getElementById("middlename").value = ror[0].userinfo_mname
+        document.getElementById("lastname").value = ror[0].userinfo_lname
+        document.getElementById("gender").value = ror[0].userinfo_gender
+        document.getElementById("emailaddress").value = ror[0].userinfo_email
+        document.getElementById("mobilenumber").value = ror[0].userinfo_number
+        document.getElementById("designation").value = ror[0].userinfo_designation
+        document.getElementById("department").value = ror[0].userinfo_department
+      })
+      .catch((err) => {
+        console.log('error : ',err)
+      })
+    }
+    retrievedata()
   },[])
 
   // change photo
@@ -37,12 +42,62 @@ function Profile() {
 
   // save user info
   const usersave = () => {
-    alert("This function is not available right now.")
+    let fname = document.getElementById("firstname").value
+    let mname = document.getElementById("middlename").value
+    let lname = document.getElementById("lastname").value
+    let gender = document.getElementById("gender").value
+    
+    const userdatasave = async () => {
+      await api.put(`${cvsuID}`,{
+        cvsu_id: cvsuID,
+        userinfo_fname: fname,
+        userinfo_mname: mname,
+        userinfo_lname: lname,
+        userinfo_gender: gender,
+      })
+      .then(response => {
+        console.log('response : ', response.status)
+        alert('User information updated successfully.')
+        window.location.reload(false) // reload
+      })
+      .catch((err) => {
+        console.log('error : ', err)
+        alert(`Can't process your request. please try again later.`)
+      })
+    }
+    //userdatasave()
+    console.log('save na this');
   }
 
   // save contact info
-  const contactsave = () => {
-    alert("This function is not available right now.")
+  const goedit = () => {
+    let email = document.getElementById("emailaddress").value
+    let number = document.getElementById("mobilenumber").value
+    let designation = document.getElementById("designation").value
+    let department = document.getElementById("department").value
+    
+    /*const userdatasave = async () => {
+      await api.put(`${cvsuID}`,{
+        cvsu_id: cvsuID,
+        userinfo_email: email,
+        userinfo_number: number,
+        userinfo_designation: designation,
+        userinfo_department: department,
+      })
+      .then(response => {
+        console.log('response : ', response.data.message)
+        alert('Contact information updated successfully.')
+        //window.location.reload(false) // reload
+      })
+      .catch((err) => {
+        console.log('error : ', err)
+        alert(`Can't process your request. please try again later.`)
+      })
+    }
+    //userdatasave()
+
+    */
+    console.log('pidi na mag edit');
   }
 
   return (
@@ -64,10 +119,10 @@ function Profile() {
     </div>
     <div className="row">
       <div className="col-lg-4 col-xl-5">
-        <div className="card mb-3" style={{ height: 318 }}>
+        <div className="card mb-3" style={{ height: 272 }}>
           <div className="card-body text-center shadow">
             <img
-              className="rounded-circle mb-3 mt-4"
+              className="rounded-circle mb-1 mt-2"
               src={dog}
               width={160}
               height={160}
@@ -98,7 +153,6 @@ function Profile() {
             <strong>User Information</strong>
           </div>
           <div className="card-body">
-            <form>
               <div className="form-row">
                 <div className="col">
                   <div className="form-group">
@@ -161,16 +215,6 @@ function Profile() {
                   </div>
                 </div>
               </div>
-              <div className="form-group" style={{ color: "rgb(255,255,255)" }}>
-                <button
-                  className="btn btn-sm"
-                  style={{ background: "#75a478", color: "rgb(255,255,255)" }}
-                  onClick={usersave}
-                >
-                  Save Settings
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       </div>
@@ -184,18 +228,36 @@ function Profile() {
                 <strong>Contact Information</strong>
               </div>
               <div className="card-body">
-                <form>
-                  <div className="form-group">
-                    <label htmlFor="address">
-                      <strong>Email Address</strong>
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="emailaddress"
-                      placeholder="user@cvsu.edu.ph"
-                      name="address"
-                    />
+                  <div className="form-row">
+                    <div className="col">
+                      <div className="form-group">
+                        <label htmlFor="address">
+                          <strong>Email Address</strong>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="emailaddress"
+                          placeholder="user@cvsu.edu.ph"
+                          name="address"
+                        />
+                      </div>
+                    </div>
+                    <div className="col">
+                      <div className="form-group">
+                        <label htmlFor="address">
+                          <strong>Department</strong>
+                        </label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          id="department"
+                          placeholder="Department"
+                          name="department"
+                          readOnly
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div className="form-row">
                     <div className="col">
@@ -209,7 +271,7 @@ function Profile() {
                           type="text"
                           id="mobilenumber"
                           placeholder="Mobile Number"
-                          name="city"
+                          name="mobilenumber"
                         />
                       </div>
                     </div>
@@ -231,14 +293,13 @@ function Profile() {
                   </div>
                   <div className="form-group">
                     <button
-                      className="btn btn-sm"
-                      onClick = {contactsave}
+                      className="btn btn-lg"
+                      onClick = {goedit}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
                     >
-                      Save Settings
+                      {edit}
                     </button>
                   </div>
-                </form>
               </div>
             </div>
           </div>
