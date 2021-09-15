@@ -3,32 +3,23 @@ import React from 'react'
 function Navbar() {
     return (
     <nav
-        className="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top"
-        style={{ boxShadow: "0px 4px 10px" }}
+        className="navbar navbar-light navbar-expand bg-white shadow mb-5 topbar static-top"
+        style={{ boxShadow: "0px 4px 5px",height: "5%"}}
       >
-        <div className="container-fluid">
-          <button
-            className="btn btn-link d-md-none rounded-circle mr-3"
-            id="sidebarToggleTop"
-            type="button"
-          >
-            <i className="fas fa-bars" />
-          </button>
-          <ul className="navbar-nav flex-nowrap ml-auto">
-            <div className="d-none d-sm-block topbar-divider" />
-            <li className="nav-item dropdown no-arrow">
-              <div className="nav-item dropdown no-arrow">
+        <div className="container-fluid" >
+          <ul className="navbar-nav ml-auto">
+            <div className="d-none d-sm-block " />
+            <li className="nav-item  no-arrow">
+              <div className="nav-item  no-arrow">
                 <a
-                  className="nav-link"
+                  className="btn-outline-light"
                   aria-expanded="false"
-                  data-toggle="dropdown"
                   href="/login"
                 >
-                  <span className="d-none d-lg-inline mr-2 text-gray-600 small">
+                  <span className="d-none d-lg-inline mb-4 mr-2 text-gray-600 small">
+                  <span className="fa fa-sign-out mr-2" aria-hidden="true"/>
                     Logout
-                    <span className="fa fa-sign-out ml-3" aria-hidden="true"/>
                   </span>
-                  
                 </a>
               </div>
             </li>
