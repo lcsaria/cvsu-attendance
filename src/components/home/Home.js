@@ -5,7 +5,8 @@ function Home() {
     const [cvsuID, setcvsuID] = useState('');
     const [password, setPassword] = useState('');
 
-    const login = () => {
+    const login = (e) => {
+      e.preventDefault();
       console.log(cvsuID+ " -> "+password)
       if (!cvsuID) return alert('please enter cvsu ID!')
       if (!password) return alert('please enter password!')
@@ -20,7 +21,7 @@ function Home() {
       })
       .catch((err) => 
       {
-        console.log(err.response.data)
+        console.log(err)
         alert("Incorrect CvSU ID / Pin")
         return
       })
@@ -48,7 +49,7 @@ function Home() {
                       <div className="text-center">
                         <h4 className="text-dark mb-4">Welcome Back!</h4>
                       </div>
-                      { /*<form className="user"> */ }
+                      <form className="user" onSubmit = {(e) => login(e)}>
                         <div className="form-group">
                           <input
                             className="form-control form-control-user"
@@ -99,7 +100,7 @@ function Home() {
                           Login
                         </button>
                         <hr />
-                      {/*</form> */}
+                      </form>
                     </div>
                   </div>
                 </div>
