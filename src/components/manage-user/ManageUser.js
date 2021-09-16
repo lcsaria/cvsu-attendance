@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
 import * as ReactBootstrap from 'react-bootstrap';
 // import { useFormState } from 'react-hook-form'
@@ -153,7 +152,6 @@ function ManageUser() {
   </div>
       <Footer/>
     </div>
-    <Top/>
   </div>
       )
   }

@@ -4,7 +4,6 @@ import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
-import Top from '../template/Top'
 import api from '../../api/axios'
 
 var editcheck = true;
@@ -328,7 +327,6 @@ function Profile() {
       </div>
       <Footer/>
     </div>
-    <Top/>
   </div>
   )
 }

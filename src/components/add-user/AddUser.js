@@ -3,7 +3,6 @@ import { useState } from 'react/cjs/react.development'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
 
 function AddUser() {
@@ -296,7 +295,6 @@ return (
 </div>
     <Footer/>
   </div>
-  <Top/>
 </div>
     )
 }
