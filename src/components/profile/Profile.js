@@ -12,7 +12,6 @@ function Profile() {
   // eslint-disable-next-line no-unused-vars
   const [userData, setUserData] = useState('')
   const [edit, setEdit] = useState('Edit Infomation')
-<<<<<<< HEAD
  
   useEffect(() => {
     const retrievedata = async () => {
@@ -25,10 +24,8 @@ function Profile() {
     }
     retrievedata()
   },[])
-=======
-  const [loading, setLoading] = useState(false);
 
->>>>>>> fad1c1b99674cf639e9ff338b8ac33b2198ebfbf
+  const [loading, setLoading] = useState(false);
 
   // change photo
   const changePhoto = () => {
