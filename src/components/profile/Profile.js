@@ -13,23 +13,12 @@ function Profile() {
  
   useEffect(() => {
     const retrievedata = async () => {
-      await api.get(cvsuID)
-      .then(response => {
-        var ror = response.data
-        console.log('res : ',ror[0].userinfo_fname)
+      const response = await api.get(cvsuID).catch((err) => {
+        console.log('error : ', err)
+      })
+      if (response && response.data) {
         setUserData(response.data)
-        document.getElementById("firstname").value = ror[0].userinfo_fname
-        document.getElementById("middlename").value = ror[0].userinfo_mname
-        document.getElementById("lastname").value = ror[0].userinfo_lname
-        document.getElementById("gender").value = ror[0].userinfo_gender
-        document.getElementById("emailaddress").value = ror[0].userinfo_email
-        document.getElementById("mobilenumber").value = ror[0].userinfo_number
-        document.getElementById("designation").value = ror[0].userinfo_designation
-        document.getElementById("department").value = ror[0].userinfo_department
-      })
-      .catch((err) => {
-        console.log('error : ',err)
-      })
+      }
     }
     retrievedata()
   },[])
@@ -161,6 +150,7 @@ function Profile() {
                       id="firstname"
                       placeholder="First Name"
                       name="firstname"
+                      defaultValue= {userData ? userData[0].userinfo_fname : ''}
                       readOnly
                     />
                   </div>
@@ -176,6 +166,7 @@ function Profile() {
                       id="middlename"
                       placeholder="Middle Name"
                       name="middlename"
+                      defaultValue= {userData ? userData[0].userinfo_mname : ''}
                       readOnly
                     />
                   </div>
@@ -194,6 +185,7 @@ function Profile() {
                       id="lastname"
                       placeholder="Last Name"
                       name="lastname"
+                      defaultValue= {userData ? userData[0].userinfo_lname : ''}
                       readOnly
                     />
                   </div>
@@ -209,6 +201,7 @@ function Profile() {
                       id="gender"
                       placeholder="Gender"
                       name="gender"
+                      defaultValue= {userData ? userData[0].userinfo_gender : ''}
                       readOnly
                     />
                   </div>
@@ -239,6 +232,7 @@ function Profile() {
                           id="emailaddress"
                           placeholder="user@cvsu.edu.ph"
                           name="address"
+                          defaultValue= {userData ? userData[0].userinfo_email : ''}
                           readOnly
                         />
                       </div>
@@ -254,6 +248,7 @@ function Profile() {
                           id="department"
                           placeholder="Department"
                           name="department"
+                          defaultValue= {userData ? userData[0].userinfo_department : ''}
                           readOnly
                         />
                       </div>
@@ -272,6 +267,7 @@ function Profile() {
                           id="mobilenumber"
                           placeholder="Mobile Number"
                           name="mobilenumber"
+                          defaultValue= {userData ? userData[0].userinfo_number : ''}
                           readOnly
                         />
                       </div>
@@ -287,6 +283,7 @@ function Profile() {
                           id="designation"
                           placeholder="Designation"
                           name="designation"
+                          defaultValue= {userData ? userData[0].userinfo_designation : ''}
                           readOnly
                         />
                       </div>

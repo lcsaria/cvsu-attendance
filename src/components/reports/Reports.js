@@ -10,16 +10,16 @@ function Reports() {
 const [data, setData] = useState([])
 
 useEffect(() => {
+  
   const retrieveall = async () => {
-    await api.get('attendance')
-    .then(response => {
-      console.log('response : ', response.data)
+    const response = await api.get('attendance').catch((err) => {
+      console.log('error: ', err)
+    })
+    if (response && response.data) {
       setData(response.data)
-    })
-    .catch((err) => {
-      console.log('error : ', err)
-    })
+    }
   }
+  
   retrieveall()
 },[])
 
