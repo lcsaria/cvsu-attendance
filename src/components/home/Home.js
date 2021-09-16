@@ -123,8 +123,9 @@ function Home() {
                             <span>Login</span>
                           </div>
                           ) : (
-                          <span>Login</span>)
-                          }
+                          <span>Login</span>
+                        )
+                        }
                         </button>
                         <hr />
                       </form>
