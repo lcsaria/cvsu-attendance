@@ -2,9 +2,7 @@ import React, { useEffect, useState} from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
-import { faAudioDescription } from '@fortawesome/free-solid-svg-icons'
 
 function Reports() {
 const [data, setData] = useState([])
@@ -111,7 +109,6 @@ return (
 </div>
     <Footer/>
   </div>
-    <Top/>
 </div>
     )
 }
