@@ -5,6 +5,8 @@ import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
 import api from '../../api/axios'
+import SidebarUser from '../template/SidebarUser';
+import SidebarHR from '../template/SidebarHR';
 
 var editcheck = true;
 function Profile() {
@@ -117,7 +119,14 @@ function Profile() {
 
   return (
   <div id="wrapper">
-    <Sidebar/>
+    {
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
     <div className="d-flex flex-column" id="content-wrapper">
       <div id="content">
         <Navbar/>

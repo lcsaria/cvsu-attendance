@@ -3,6 +3,8 @@ import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import api from '../../api/axios'
+import SidebarUser from '../template/SidebarUser'
+import SidebarHR from '../template/SidebarHR'
 
 function Reports() {
 const [data, setData] = useState([])
@@ -33,7 +35,14 @@ const renderTable = () => {
 
 return (
 <div id="wrapper">
-  <Sidebar/>
+{
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>

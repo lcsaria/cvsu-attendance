@@ -4,6 +4,8 @@ import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import api from '../../api/axios'
+import SidebarUser from '../template/SidebarUser'
+import SidebarHR from '../template/SidebarHR'
 
 function AddUser() {
 const gen = [
@@ -91,7 +93,14 @@ const handle = (e) => {
 
 return (
 <div id="wrapper">
-  <Sidebar/>
+{
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>

@@ -3,7 +3,7 @@ import React from 'react'
 import logo from '../../assets/school-logo-small.png'
 import { useHistory } from 'react-router-dom';
 
-function Sidebar() {
+function SidebarHR() {
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed' || true);
   const [isExpanded, setIsExpanded] = React.useState(sidebarCollapsed ? false : true);
   const history = useHistory();
@@ -57,19 +57,11 @@ function Sidebar() {
         </div>
       </div>
       </a>
-      <a className="nav-link" href="/add-user">  
+      <a className="nav-link" href="/reports">  
       <div className="sidebar-items">
         <div className="item">
-          <i className="fas fa-user-plus mr-4"/>
-          <span className="sidebar-text">Add User</span>
-        </div>
-      </div>
-      </a>
-      <a className="nav-link" href="/manage-user">  
-      <div className="sidebar-items">
-        <div className="item">
-          <i className="fas fa-users mr-4"/>
-          <span className="sidebar-text">Manage User</span>
+          <i className="fas fa-table mr-4"/>
+          <span className="sidebar-text">Report</span>
         </div>
       </div>
       </a>
@@ -85,4 +77,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar
+export default SidebarHR
