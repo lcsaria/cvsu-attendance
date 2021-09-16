@@ -201,7 +201,7 @@ return (
                 <strong>Gender</strong>
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_gender" onChange={handleGenderChange}> 
+              <select className="form-control" id="userinfo_gender"> 
                   {/*<option value={gender} id="gender"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -233,7 +233,7 @@ return (
                 <br />
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_department" onChange={handleDepartmentChange}> 
+              <select className="form-control" id="userinfo_department"> 
                 {/*<option value={department} id="department" name="department"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
