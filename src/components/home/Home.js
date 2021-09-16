@@ -9,15 +9,19 @@ function Home() {
 
     const submit = (e) => {
       setLoading(true);
-      if (!cvsuID) {
-        alert('please enter cvsu ID!')
-        setLoading(false);
-      } 
-      else if (!password) {
-        alert('please enter password!')
+      checkCredentials(e);
+    }
+
+    const checkCredentials = (e) => {
+      if (!cvsuID){
+        alert("Enter your CvSU ID");
         setLoading(false);
       }
-      else { 
+      else if (!password){
+        alert("Enter your password");
+        setLoading(false);
+      }
+      else {
         login(e);
       }
     }
@@ -33,6 +37,9 @@ function Home() {
         console.log(JSON.stringify(response.data))
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
+        localStorage.setItem('userType',response.data[0].user_type)
+        console.log(localStorage.getItem('cvsuID'))
+        console.log(localStorage.getItem('userType'))
         window.location.href='/dashboard';
       })
       .catch((err) => 
@@ -66,7 +73,7 @@ function Home() {
                       <div className="text-center">
                         <h4 className="text-dark mb-4">Welcome Back!</h4>
                       </div>
-                      <form className="user" onSubmit = {(e) => login(e)}>
+                      <form className="user">
                         <div className="form-group">
                           <input
                             className="form-control form-control-user"
@@ -109,7 +116,7 @@ function Home() {
                           </div>
                         </div>
                         <button
-                          onClick={submit}
+                          onClick={(e)=>submit(e)}
                           className="btn btn-success btn-block text-white btn-user"
                           disabled={loading}
                           //role="button"

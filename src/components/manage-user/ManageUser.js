@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
+import SidebarHR from '../template/SidebarHR';
+import SidebarUser from '../template/SidebarUser';
 import api from '../../api/axios'
 import * as ReactBootstrap from 'react-bootstrap';
 // import { useFormState } from 'react-hook-form'
@@ -11,7 +12,11 @@ function ManageUser() {
   //const cvsuID = localStorage.getItem('cvsuID') || ''
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const search = (e) => {
+    setSearchTerm(e.target.value);
+  }
   useEffect(() => {
     const retrieve = async () => {
       await api.get('')
@@ -28,7 +33,14 @@ function ManageUser() {
   },[])
 
   const renderTable = () => {
-    return data.map(user => {
+    // eslint-disable-next-line array-callback-return
+    return data.filter((user) => {
+      if (searchTerm === "") {
+        return user;
+      } else if (user.userinfo_lname.toLowerCase().includes(searchTerm.toLowerCase())) {
+        return user;
+      }
+    }).map(user => {
       return ( 
         <tr key = {user.cvsu_id}>
           <td>{user.userinfo_lname + ', ' + user.userinfo_fname}</td>
@@ -62,7 +74,14 @@ function ManageUser() {
 
   return (
   <div id="wrapper">
-    <Sidebar/>
+    {
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
     <div className="d-flex flex-column" id="content-wrapper">
       <div id="content">
         <Navbar/>
@@ -98,7 +117,8 @@ function ManageUser() {
                   type="search"
                   className="form-control form-control-sm"
                   aria-controls="dataTable"
-                  placeholder="Search"
+                  placeholder="Search..."
+                  onChange={search}
                 />
               </label>
             </div>
@@ -141,7 +161,6 @@ function ManageUser() {
   </div>
       <Footer/>
     </div>
-    <Top/>
   </div>
       )
   }

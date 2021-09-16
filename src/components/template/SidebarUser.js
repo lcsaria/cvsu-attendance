@@ -3,7 +3,7 @@ import React from 'react'
 import logo from '../../assets/school-logo-small.png'
 import { useHistory } from 'react-router-dom';
 
-function Sidebar() {
+function SidebarUser() {
   const sidebarCollapsed = localStorage.getItem('sidebar-collapsed' || true);
   const [isExpanded, setIsExpanded] = React.useState(sidebarCollapsed ? false : true);
   const history = useHistory();
@@ -57,22 +57,6 @@ function Sidebar() {
         </div>
       </div>
       </a>
-      <a className="nav-link" href="/add-user">  
-      <div className="sidebar-items">
-        <div className="item">
-          <i className="fas fa-user-plus mr-4"/>
-          <span className="sidebar-text">Add User</span>
-        </div>
-      </div>
-      </a>
-      <a className="nav-link" href="/manage-user">  
-      <div className="sidebar-items">
-        <div className="item">
-          <i className="fas fa-users mr-4"/>
-          <span className="sidebar-text">Manage User</span>
-        </div>
-      </div>
-      </a>
       <a className="nav-link" onClick={logOut}> 
       <div className="sidebar-items">
         <div className="item">
@@ -85,4 +69,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar
+export default SidebarUser

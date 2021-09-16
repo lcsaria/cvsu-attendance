@@ -3,8 +3,9 @@ import { useState } from 'react/cjs/react.development'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
+import SidebarUser from '../template/SidebarUser'
+import SidebarHR from '../template/SidebarHR'
 
 function AddUser() {
 const gen = [
@@ -22,9 +23,6 @@ const dept = [
   { label: "Admin Office", value: "Admin Office" },
 ]
 
-
-const [gender, setGender] = React.useState("");
-const [department, setDepartment] = React.useState("");
 const [data, setData] = useState({
   cvsu_id: '',
   password: '',
@@ -37,13 +35,6 @@ const [data, setData] = useState({
   userinfo_department: '',
   userinfo_number : '',
 })
-
-let handleGenderChange = (e) => {
-}
-
-let handleDepartmentChange = (e) => {
-  setDepartment(e.target.value)
-}
 
 const submitlogin = async (e) => {
   await api.post('addlogin',{
@@ -102,7 +93,14 @@ const handle = (e) => {
 
 return (
 <div id="wrapper">
-  <Sidebar/>
+{
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>
@@ -211,7 +209,7 @@ return (
                 <strong>Gender</strong>
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_gender" onChange={handleGenderChange}> 
+              <select className="form-control" id="userinfo_gender"> 
                   {/*<option value={gender} id="gender"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -243,7 +241,7 @@ return (
                 <br />
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_department" onChange={handleDepartmentChange}> 
+              <select className="form-control" id="userinfo_department"> 
                 {/*<option value={department} id="department" name="department"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -306,7 +304,6 @@ return (
 </div>
     <Footer/>
   </div>
-  <Top/>
 </div>
     )
 }

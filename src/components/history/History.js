@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
+import SidebarHR from '../template/SidebarHR';
+import SidebarUser from '../template/SidebarUser';
 import api from '../../api/axios'
 
 function History() {
@@ -37,7 +38,14 @@ const renderTable = () => {
 
 return (
 <div id="wrapper">
-  <Sidebar/>
+{
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>
@@ -106,7 +114,6 @@ return (
 </div>
     <Footer/>
   </div>
-  <Top/>
 </div>
     )
 }

@@ -2,24 +2,24 @@ import React, { useEffect, useState} from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
-import { faAudioDescription } from '@fortawesome/free-solid-svg-icons'
+import SidebarUser from '../template/SidebarUser'
+import SidebarHR from '../template/SidebarHR'
 
 function Reports() {
 const [data, setData] = useState([])
 
 useEffect(() => {
+  
   const retrieveall = async () => {
-    await api.get('attendance')
-    .then(response => {
-      console.log('response : ', response.data)
+    const response = await api.get('attendance').catch((err) => {
+      console.log('error: ', err)
+    })
+    if (response && response.data) {
       setData(response.data)
-    })
-    .catch((err) => {
-      console.log('error : ', err)
-    })
+    }
   }
+  
   retrieveall()
 },[])
 
@@ -35,7 +35,14 @@ const renderTable = () => {
 
 return (
 <div id="wrapper">
-  <Sidebar/>
+{
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>
@@ -111,7 +118,6 @@ return (
 </div>
     <Footer/>
   </div>
-    <Top/>
 </div>
     )
 }

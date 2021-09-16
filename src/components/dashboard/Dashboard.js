@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import * as ReactBootstrap from 'react-bootstrap';
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import Top from '../template/Top'
 import api from '../../api/axios'
+import SidebarHR from '../template/SidebarHR';
+import SidebarUser from '../template/SidebarUser';
+
 var timecheck = false
 function Dashboard() {
   var today = new Date()
@@ -15,7 +18,8 @@ function Dashboard() {
   const [timeintxt, setTimeintxt] = useState('TIME IN')
   const [timeIn, setTimeIn] = useState('')
   const [attendance, setAttendance] = useState([])
-
+  const [loading, setLoading] = useState(false)
+  
   // get time text
   const getTime = () => {
     var time = today.getHours()
@@ -52,6 +56,8 @@ function Dashboard() {
   // react hooks for preload data.
   useEffect(() => {
     // get data
+    
+    console.log(localStorage.getItem("userType"))
     const retrieveall = async () => {
       await api.get(cvsuID)
       .then(response => {
@@ -87,15 +93,18 @@ function Dashboard() {
   const timeInorOut = async () => {
     if (!timecheck) {
       console.log("TIME IN!", timecheck)
+      setLoading(true)
       await api.post(`attendance/${cvsuID}`)
       .then(response => {
         timecheck = true
         setTimeintxt("TIME OUT")
         alert("Time in success!")
         getUserTime()
+        setLoading(false)
       })
       .catch((err) => {
         alert(err.response.data)
+        setLoading(false)
       })
       return
     }
@@ -107,9 +116,11 @@ function Dashboard() {
         timecheck = false
         alert("Time out success!")
         getUserTime()
+        setLoading(false)
       })
       .catch((err) => {
         alert(err.response.data)
+        setLoading(false)
       })
       
       console.log("TIME OUT!", timecheck)
@@ -129,9 +140,17 @@ function Dashboard() {
     })
   }
 
+
 return (
 <div id="wrapper">
-  <Sidebar/>
+  {
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
   <div className="d-flex flex-column" id="content-wrapper">
     <div id="content">
       <Navbar/>
@@ -179,7 +198,18 @@ return (
                   }}
                   onClick={timeInorOut}
                 >
-                  {timeintxt}
+                  {loading ? (
+                          <div>
+                            <span>
+                              <ReactBootstrap.Spinner animation="border" className="mr-2 mb-2"/>
+                            </span>
+                            <span>{timeintxt}</span>
+                          </div>
+                          ) : (
+                          <span>{timeintxt}</span>
+                        )
+                        }
+                  
                 </button>
               </div>
             </div>
@@ -224,7 +254,6 @@ return (
     </div>
     <Footer/>
   </div>
-  <Top/>
 </div>
     )
 }

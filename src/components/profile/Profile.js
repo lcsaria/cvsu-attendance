@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from 'react'
+import * as ReactBootstrap from 'react-bootstrap';
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
-import Top from '../template/Top'
 import api from '../../api/axios'
+import SidebarUser from '../template/SidebarUser';
+import SidebarHR from '../template/SidebarHR';
+
 var editcheck = true;
 function Profile() {
   const cvsuID = localStorage.getItem('cvsuID') || ''
+  // eslint-disable-next-line no-unused-vars
   const [userData, setUserData] = useState('')
   const [edit, setEdit] = useState('Edit Infomation')
  
   useEffect(() => {
     const retrievedata = async () => {
-      await api.get(cvsuID)
-      .then(response => {
-        var ror = response.data
-        console.log('res : ',ror[0].userinfo_fname)
+      const response = await api.get(cvsuID).catch((err) => {
+        console.log('error : ', err)
+      })
+      if (response && response.data) {
         setUserData(response.data)
-        document.getElementById("firstname").value = ror[0].userinfo_fname
-        document.getElementById("middlename").value = ror[0].userinfo_mname
-        document.getElementById("lastname").value = ror[0].userinfo_lname
-        document.getElementById("gender").value = ror[0].userinfo_gender
-        document.getElementById("emailaddress").value = ror[0].userinfo_email
-        document.getElementById("mobilenumber").value = ror[0].userinfo_number
-        document.getElementById("designation").value = ror[0].userinfo_designation
-        document.getElementById("department").value = ror[0].userinfo_department
-      })
-      .catch((err) => {
-        console.log('error : ',err)
-      })
+      }
     }
     retrievedata()
   },[])
+
+  const [loading, setLoading] = useState(false);
 
   // change photo
   const changePhoto = () => {
@@ -49,6 +44,7 @@ function Profile() {
 
   // save user info
   const usersave = () => {
+    setLoading(true);
     let fname = document.getElementById("firstname").value
     let mname = document.getElementById("middlename").value
     let lname = document.getElementById("lastname").value
@@ -77,10 +73,12 @@ function Profile() {
         setEdit("Edit Information")
         changestats()
         console.log('save na this');
+        setLoading(false);
         window.location.reload(false) // reload
       })
       .catch((err) => {
         console.log('error : ', err)
+        setLoading(false);
         alert(`Can't process your request. please try again later.`)
       })
     }
@@ -96,9 +94,39 @@ function Profile() {
     console.log('pidi na mag edit');
   }
 
+  useEffect(() => {
+    const retrievedata = async () => {
+      await api.get(cvsuID)
+      .then(response => {
+        var ror = response.data
+        console.log('res : ',ror[0].userinfo_fname)
+        setUserData(response.data)
+        document.getElementById("firstname").value = ror[0].userinfo_fname
+        document.getElementById("middlename").value = ror[0].userinfo_mname
+        document.getElementById("lastname").value = ror[0].userinfo_lname
+        document.getElementById("gender").value = ror[0].userinfo_gender
+        document.getElementById("emailaddress").value = ror[0].userinfo_email
+        document.getElementById("mobilenumber").value = ror[0].userinfo_number
+        document.getElementById("designation").value = ror[0].userinfo_designation
+        document.getElementById("department").value = ror[0].userinfo_department
+      })
+      .catch((err) => {
+        console.log('error : ',err)
+      })
+    }
+    retrievedata()
+  },[])
+
   return (
   <div id="wrapper">
-    <Sidebar/>
+    {
+    localStorage.getItem("userType") === "0" ? 
+    (<Sidebar/>) : (
+      (localStorage.getItem("userType") === "1" ) ? 
+      (<SidebarUser/>) 
+    : (<SidebarHR/>)
+    )
+  }
     <div className="d-flex flex-column" id="content-wrapper">
       <div id="content">
         <Navbar/>
@@ -161,6 +189,7 @@ function Profile() {
                       id="firstname"
                       placeholder="First Name"
                       name="firstname"
+                      defaultValue= {userData ? userData[0].userinfo_fname : ''}
                       readOnly
                     />
                   </div>
@@ -176,6 +205,7 @@ function Profile() {
                       id="middlename"
                       placeholder="Middle Name"
                       name="middlename"
+                      defaultValue= {userData ? userData[0].userinfo_mname : ''}
                       readOnly
                     />
                   </div>
@@ -194,6 +224,7 @@ function Profile() {
                       id="lastname"
                       placeholder="Last Name"
                       name="lastname"
+                      defaultValue= {userData ? userData[0].userinfo_lname : ''}
                       readOnly
                     />
                   </div>
@@ -209,6 +240,7 @@ function Profile() {
                       id="gender"
                       placeholder="Gender"
                       name="gender"
+                      defaultValue= {userData ? userData[0].userinfo_gender : ''}
                       readOnly
                     />
                   </div>
@@ -239,6 +271,7 @@ function Profile() {
                           id="emailaddress"
                           placeholder="user@cvsu.edu.ph"
                           name="address"
+                          defaultValue= {userData ? userData[0].userinfo_email : ''}
                           readOnly
                         />
                       </div>
@@ -254,6 +287,7 @@ function Profile() {
                           id="department"
                           placeholder="Department"
                           name="department"
+                          defaultValue= {userData ? userData[0].userinfo_department : ''}
                           readOnly
                         />
                       </div>
@@ -272,6 +306,7 @@ function Profile() {
                           id="mobilenumber"
                           placeholder="Mobile Number"
                           name="mobilenumber"
+                          defaultValue= {userData ? userData[0].userinfo_number : ''}
                           readOnly
                         />
                       </div>
@@ -287,6 +322,7 @@ function Profile() {
                           id="designation"
                           placeholder="Designation"
                           name="designation"
+                          defaultValue= {userData ? userData[0].userinfo_designation : ''}
                           readOnly
                         />
                       </div>
@@ -295,10 +331,19 @@ function Profile() {
                   <div className="form-group">
                     <button
                       className="btn btn-lg"
-                      onClick = {editcheck? goedit : usersave}
+                      onClick = {editcheck ? goedit : usersave}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
+                      disabled={loading}
                     >
-                      {edit}
+                      {loading ? 
+                      <>
+                        <span>
+                          <ReactBootstrap.Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
+                        </span>
+                        <span>{edit}</span>
+                      </>
+                      :
+                      edit}
                     </button>
                   </div>
               </div>
@@ -311,7 +356,6 @@ function Profile() {
       </div>
       <Footer/>
     </div>
-    <Top/>
   </div>
   )
 }
