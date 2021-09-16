@@ -1,38 +1,20 @@
 import React, { useEffect, useState } from 'react'
+import * as ReactBootstrap from 'react-bootstrap';
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import dog from '../../assets/img/dogs/image3.jpeg'
 import Top from '../template/Top'
 import api from '../../api/axios'
+
 var editcheck = true;
 function Profile() {
   const cvsuID = localStorage.getItem('cvsuID') || ''
+  // eslint-disable-next-line no-unused-vars
   const [userData, setUserData] = useState('')
   const [edit, setEdit] = useState('Edit Infomation')
- 
-  useEffect(() => {
-    const retrievedata = async () => {
-      await api.get(cvsuID)
-      .then(response => {
-        var ror = response.data
-        console.log('res : ',ror[0].userinfo_fname)
-        setUserData(response.data)
-        document.getElementById("firstname").value = ror[0].userinfo_fname
-        document.getElementById("middlename").value = ror[0].userinfo_mname
-        document.getElementById("lastname").value = ror[0].userinfo_lname
-        document.getElementById("gender").value = ror[0].userinfo_gender
-        document.getElementById("emailaddress").value = ror[0].userinfo_email
-        document.getElementById("mobilenumber").value = ror[0].userinfo_number
-        document.getElementById("designation").value = ror[0].userinfo_designation
-        document.getElementById("department").value = ror[0].userinfo_department
-      })
-      .catch((err) => {
-        console.log('error : ',err)
-      })
-    }
-    retrievedata()
-  },[])
+  const [loading, setLoading] = useState(false);
+
 
   // change photo
   const changePhoto = () => {
@@ -49,6 +31,7 @@ function Profile() {
 
   // save user info
   const usersave = () => {
+    setLoading(true);
     let fname = document.getElementById("firstname").value
     let mname = document.getElementById("middlename").value
     let lname = document.getElementById("lastname").value
@@ -77,10 +60,12 @@ function Profile() {
         setEdit("Edit Information")
         changestats()
         console.log('save na this');
+        setLoading(false);
         window.location.reload(false) // reload
       })
       .catch((err) => {
         console.log('error : ', err)
+        setLoading(false);
         alert(`Can't process your request. please try again later.`)
       })
     }
@@ -95,6 +80,29 @@ function Profile() {
     changestats()
     console.log('pidi na mag edit');
   }
+
+  useEffect(() => {
+    const retrievedata = async () => {
+      await api.get(cvsuID)
+      .then(response => {
+        var ror = response.data
+        console.log('res : ',ror[0].userinfo_fname)
+        setUserData(response.data)
+        document.getElementById("firstname").value = ror[0].userinfo_fname
+        document.getElementById("middlename").value = ror[0].userinfo_mname
+        document.getElementById("lastname").value = ror[0].userinfo_lname
+        document.getElementById("gender").value = ror[0].userinfo_gender
+        document.getElementById("emailaddress").value = ror[0].userinfo_email
+        document.getElementById("mobilenumber").value = ror[0].userinfo_number
+        document.getElementById("designation").value = ror[0].userinfo_designation
+        document.getElementById("department").value = ror[0].userinfo_department
+      })
+      .catch((err) => {
+        console.log('error : ',err)
+      })
+    }
+    retrievedata()
+  },[])
 
   return (
   <div id="wrapper">
@@ -295,10 +303,19 @@ function Profile() {
                   <div className="form-group">
                     <button
                       className="btn btn-lg"
-                      onClick = {editcheck? goedit : usersave}
+                      onClick = {editcheck ? goedit : usersave}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
+                      disabled={loading}
                     >
-                      {edit}
+                      {loading ? 
+                      <>
+                        <span>
+                          <ReactBootstrap.Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
+                        </span>
+                        <span>{edit}</span>
+                      </>
+                      :
+                      edit}
                     </button>
                   </div>
               </div>

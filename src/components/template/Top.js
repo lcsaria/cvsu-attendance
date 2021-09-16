@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
+
 function Top() { 
     const [isVisible, setIsVisible] = useState(false);
 
+
     // Show button when page is scorlled upto given distance
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
+      if (window.pageYOffset > 400) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -17,13 +19,17 @@ function Top() {
     const scrollToTop = () => {
       window.scrollTo({
         top: 0,
+        left: 0,
         behavior: "smooth"
       });
     };
 
     useEffect(() => {
         window.addEventListener("scroll", toggleVisibility);
-      }, []);
+        return () => {
+          window.removeEventListener("scroll", toggleVisibility);
+        }
+    }, []);
 
     return (
         <button className="border rounded d-inline scroll-to-top" onClick={scrollToTop}>
