@@ -153,7 +153,7 @@ return (
             <h4>Tuesday | September 07, 2021</h4>
           </div>
         </div>
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-md-6">
             <div
               className="card"

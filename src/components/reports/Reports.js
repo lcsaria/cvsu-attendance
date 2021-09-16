@@ -1,10 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState} from 'react'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
 import Top from '../template/Top'
+import api from '../../api/axios'
+import { faAudioDescription } from '@fortawesome/free-solid-svg-icons'
 
 function Reports() {
+const [data, setData] = useState([])
+
+useEffect(() => {
+  const retrieveall = async () => {
+    await api.get('attendance')
+    .then(response => {
+      console.log('response : ', response.data)
+      setData(response.data)
+    })
+    .catch((err) => {
+      console.log('error : ', err)
+    })
+  }
+  retrieveall()
+},[])
+
+const renderTable = () => {
+  return data.map(user => {
+    return (
+      <tr key = {user.id}>
+        <td></td>
+      </tr>
+    )
+  })
+}
 
 return (
 <div id="wrapper">
@@ -58,6 +85,7 @@ return (
         <table className="table my-0" id="dataTable">
           <thead>
             <tr>
+              <th>Name</th>
               <th>Date</th>
               <th>Time in</th>
               <th>Time out</th>
@@ -66,69 +94,11 @@ return (
           <tbody>
             <tr>
               <td>Kaguya Shinomiya</td>
+              <td>2021-09-07</td>
               <td>07:00 AM</td>
               <td>06:00 PM</td>
             </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
+            
           </tbody>
           <tfoot>
             <tr />

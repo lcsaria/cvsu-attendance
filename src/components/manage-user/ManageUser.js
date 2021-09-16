@@ -110,8 +110,10 @@ function ManageUser() {
           role="grid"
           aria-describedby="dataTable_info"
         >
-          <table className="table my-0" id="dataTable">
-            <thead>
+          
+            { loading ? (
+              <table className="table my-0" id="dataTable">
+              <thead>
               <tr>
                 <th>Name</th>
                 <th>Email</th>
@@ -121,16 +123,17 @@ function ManageUser() {
               </tr>
             </thead>
             <tbody>
-            {loading ? (
-              renderTable()
-              ) : (
-              <ReactBootstrap.Spinner animation="border"/>
-              )}
+            {renderTable()}
             </tbody>
             <tfoot>
               <tr />
             </tfoot>
-          </table>
+            </table>
+              ) : (
+              <div className="text-center overflow-hidden">
+              <ReactBootstrap.Spinner animation="border"/>
+              </div>
+              )}
         </div>
       </div>
     </div>
