@@ -22,9 +22,6 @@ const dept = [
   { label: "Admin Office", value: "Admin Office" },
 ]
 
-
-const [gender, setGender] = React.useState("");
-const [department, setDepartment] = React.useState("");
 const [data, setData] = useState({
   cvsu_id: '',
   password: '',
@@ -37,13 +34,6 @@ const [data, setData] = useState({
   userinfo_department: '',
   userinfo_number : '',
 })
-
-let handleGenderChange = (e) => {
-}
-
-let handleDepartmentChange = (e) => {
-  setDepartment(e.target.value)
-}
 
 const submitlogin = async (e) => {
   await api.post('addlogin',{
