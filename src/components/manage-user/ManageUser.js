@@ -5,7 +5,9 @@ import Sidebar from '../template/Sidebar'
 import SidebarHR from '../template/SidebarHR';
 import SidebarUser from '../template/SidebarUser';
 import api from '../../api/axios'
-import * as ReactBootstrap from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
+import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
 // import { useFormState } from 'react-hook-form'
 
 function ManageUser() {
@@ -13,6 +15,8 @@ function ManageUser() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showDel, setShowDel] = useState(false);
+  const [showEdt, setShowEdt] = useState(false);
 
   const search = (e) => {
     setSearchTerm(e.target.value);
@@ -53,6 +57,7 @@ function ManageUser() {
               type="button"
               style={{ width: 40, height: 30 }}
               title="Edit"
+              onClick={showEdit}
             >
               <i className="fa fa-edit" title="Edit" />
             </button>
@@ -61,6 +66,7 @@ function ManageUser() {
               type="button"
               style={{ width: 40, height: 30, marginLeft: 10 }}
               title="Delete"
+              onClick={showDelete}
             >
               <i className="fa fa-trash" title="Delete" />
             </button>
@@ -70,7 +76,29 @@ function ManageUser() {
     })
   }
 
+  const handleClose = () => {
+    setShowDel(false);
+    setShowEdt(false);
+  }
+  const showEdit = () => {
+    setShowEdt(true);
+  }
 
+  const showDelete = () => {
+    setShowDel(true);
+  }
+  
+  const handleEdit = () => {
+    //LOGIC
+    alert("User update successfully");
+    setShowEdt(false);
+  }
+
+  const handleDelete = () => {
+    //LOGIC
+    alert("User delete successfully");
+    setShowDel(false);
+  }
 
   return (
   <div id="wrapper">
@@ -151,7 +179,7 @@ function ManageUser() {
             </table>
               ) : (
               <div className="text-center overflow-hidden">
-              <ReactBootstrap.Spinner animation="border"/>
+              <Spinner animation="border"/>
               </div>
               )}
         </div>
@@ -161,6 +189,8 @@ function ManageUser() {
   </div>
       <Footer/>
     </div>
+    <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose}/>   
+    <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose}/>            
   </div>
       )
   }
