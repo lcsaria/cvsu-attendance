@@ -38,8 +38,10 @@ function Home() {
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
         localStorage.setItem('userType',response.data[0].user_type)
+        localStorage.setItem('isAuthenticated', true);
         console.log(localStorage.getItem('cvsuID'))
         console.log(localStorage.getItem('userType'))
+        console.log(localStorage.getItem('isAuthenticated'))
         window.location.href='/dashboard';
       })
       .catch((err) => 
