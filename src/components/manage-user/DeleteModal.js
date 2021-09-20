@@ -1,6 +1,20 @@
-import React from 'react'
-import { Modal, Button } from 'react-bootstrap';
-function DeleteModal({show, handleClose, handleDelete}) {
+import React, { useState } from 'react'
+import { Modal, Button, Spinner } from 'react-bootstrap';
+import api from '../../api/axios'
+
+
+function DeleteModal({show, handleClose, handleDelete, del}) {
+  const [loading, setLoading] = useState(false);
+  
+  const onDelete = async () => {
+      setLoading(true);
+      await api.delete(`${del.cvsu_id}`)
+      handleDelete();
+      setLoading(false);
+      window.location.reload(false)
+    }
+  
+  
     return (
         <div>
           <Modal 
@@ -11,16 +25,25 @@ function DeleteModal({show, handleClose, handleDelete}) {
               centered>
             <Modal.Header closeButton>
               <Modal.Title>
-                Delete ^User^
+                Delete {del.userinfo_lname + ', ' + del.userinfo_fname}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              Are you sure?
+              Are you sure? 
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="danger" onClick={handleDelete}>
-                Delete
-              </Button>
+            {
+                loading ? 
+                <Button variant="danger" onClick={onDelete}>
+                  <span>
+                    <Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
+                  </span>Delete
+                </Button>
+                :
+                <Button variant="danger" onClick={onDelete}>
+                  Delete
+                </Button>
+            }
               <Button variant="light" onClick={handleClose}>
                 Close
               </Button>

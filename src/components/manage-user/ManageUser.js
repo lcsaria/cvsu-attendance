@@ -13,28 +13,18 @@ import DeleteModal from './DeleteModal';
 function ManageUser() {
   //const cvsuID = localStorage.getItem('cvsuID') || ''
   const [data, setData] = useState([]);
+  let [update, setUpdate] = useState({});
+  let [del, setDel] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDel, setShowDel] = useState(false);
   const [showEdt, setShowEdt] = useState(false);
 
+
   const search = (e) => {
     setSearchTerm(e.target.value);
   }
-  useEffect(() => {
-    const retrieve = async () => {
-      await api.get('')
-      .then(response => {
-        console.log('response : ', response.data)
-        setData(response.data)
-        setLoading(true);
-      })
-      .catch((err) => {
-        console.log('error : ',err)
-      })
-    }
-    retrieve()
-  },[])
+ 
 
   const renderTable = () => {
     // eslint-disable-next-line array-callback-return
@@ -51,13 +41,13 @@ function ManageUser() {
           <td>{user.userinfo_email}</td>
           <td>{user.userinfo_department}</td>
           <td>{user.userinfo_designation}</td>
-          <td>
+          <td > 
             <button
               className="btn btn-light btn-sm"
               type="button"
               style={{ width: 40, height: 30 }}
               title="Edit"
-              onClick={showEdit}
+              onClick={() => showEdit(user)}
             >
               <i className="fa fa-edit" title="Edit" />
             </button>
@@ -66,7 +56,7 @@ function ManageUser() {
               type="button"
               style={{ width: 40, height: 30, marginLeft: 10 }}
               title="Delete"
-              onClick={showDelete}
+              onClick={() => showDelete(user)}
             >
               <i className="fa fa-trash" title="Delete" />
             </button>
@@ -80,11 +70,15 @@ function ManageUser() {
     setShowDel(false);
     setShowEdt(false);
   }
-  const showEdit = () => {
+  
+  const showEdit = (id) => {
+    setUpdate(id);
     setShowEdt(true);
   }
 
-  const showDelete = () => {
+
+  const showDelete = (id) => {
+    setDel(id);
     setShowDel(true);
   }
   
@@ -99,6 +93,24 @@ function ManageUser() {
     alert("User delete successfully");
     setShowDel(false);
   }
+
+  useEffect(() => {
+    const retrieve = async () => {
+      await api.get('')
+      .then(response => {
+        console.log('response : ', response.data)
+        setData(response.data)
+        if (data) {
+          setLoading(true);
+        }
+        
+      })
+      .catch((err) => {
+        console.log('error : ',err)
+      })
+    }
+    retrieve()
+  },[])
 
   return (
   <div id="wrapper">
@@ -189,8 +201,8 @@ function ManageUser() {
   </div>
       <Footer/>
     </div>
-    <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose}/>   
-    <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose}/>            
+    <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose} id={update}/>   
+    <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose} del={del}/>            
   </div>
       )
   }

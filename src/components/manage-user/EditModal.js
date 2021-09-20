@@ -1,8 +1,18 @@
+// eslint-disable-next-line no-lone-blocks
+/*
+ISSUE 
+1. when submit, the data will be undefined
+2. set data, not working
+3.
+
+*/
+
 import React, { useState } from 'react'
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Spinner } from 'react-bootstrap';
+import api from '../../api/axios'
 
-
-function EditModal({show, handleClose, handleEdit}) {
+function EditModal({show, handleClose, handleEdit, id}) {
+  const [loading, setLoading] = useState(false);
   const gen = [
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" }
@@ -18,9 +28,9 @@ function EditModal({show, handleClose, handleEdit}) {
   { label: "Admin Office", value: "Admin Office" },
   ]
   
+  
   const [data, setData] = useState({
-  cvsu_id: '',
-  password: '',
+  cvsuidnumber: '',
   userinfo_fname: '',
   userinfo_mname: '',
   userinfo_lname: '',
@@ -31,13 +41,45 @@ function EditModal({show, handleClose, handleEdit}) {
   userinfo_number : '',
   })
   
+
   const handle = (e) => {
-    const newdata = { ...data }
-    newdata[e.target.id] = e.target.value
-    setData(newdata)
-    console.log(newdata)
+    setData({...data,
+      [e.target.name]: e.target.value});
+    console.log(data)
   }
 
+  const onSubmit = (e) => {
+    setLoading(true);
+   
+
+    const userdatasave = async () => {
+      await api.put(`${id.cvsu_id}`,{
+        cvsuidnumber: `${data.cvsuidnumber}`,
+        userinfo_fname: `${data.userinfo_fname}`,
+        userinfo_mname: `${data.userinfo_mname}`,
+        userinfo_lname: `${data.userinfo_lname}`,
+        userinfo_gender: `${data.userinfo_gender}`,
+        userinfo_email: `${data.userinfo_email}`,
+        userinfo_number : `${data.userinfo_number}`,
+        userinfo_designation: `${data.userinfo_designation}`,
+        userinfo_department: `${data.userinfo_department}`,
+      })
+      .then(response => {
+        console.log('response : ', response.status)
+        handleEdit();
+        setLoading(false);
+        window.location.reload(false) // reload
+      })
+      .catch((err) => {
+        console.log('error : ', err)
+        setLoading(false);
+        alert(`Can't process your request. please try again later.`)
+      })
+    }
+    userdatasave()
+    setLoading(false);
+    
+  }
     return (
         <div>
           <Modal 
@@ -52,7 +94,6 @@ function EditModal({show, handleClose, handleEdit}) {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-
         <div className="form-row">
           <div className="col-md-6">
             <div className="form-group">
@@ -66,23 +107,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="cvsu_id"
                 placeholder="CvSU ID Number"
                 name="cvsuidnumber"
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <label htmlFor="pincode">
-                <strong>4 Digit Pin Code*</strong>
-                <br />
-              </label>
-              <input
-                onChange={(e) => handle(e)}
-                className="form-control"
-                type="password"
-                maxLength="4"
-                id="password"
-                placeholder="0000"
-                name="pincode"
+                defaultValue = {id.cvsu_id}
               />
             </div>
           </div>
@@ -103,6 +128,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_fname"
                 placeholder="First Name"
                 name="firstname"
+                defaultValue = {id.userinfo_fname}
               />
             </div>
           </div>
@@ -118,6 +144,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_mname"
                 placeholder="Middle Name"
                 name="middlename"
+                defaultValue = {id.userinfo_mname}
               />
             </div>
           </div>
@@ -133,6 +160,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_lname"
                 placeholder="Last Name"
                 name="lastname"
+                defaultValue = {id.userinfo_lname}
               />
             </div>
           </div>
@@ -142,7 +170,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 <strong>Gender</strong>
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_gender"> 
+              <select className="form-control" id="userinfo_gender" defaultValue={id.userinfo_gender}> 
                   {/*<option value={gender} id="gender"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -164,6 +192,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_email"
                 placeholder="user@cvsu.edu.ph"
                 name="emailaddress"
+                defaultValue = {id.userinfo_email}
               />
             </div>
           </div>
@@ -174,7 +203,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 <br />
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_department"> 
+              <select className="form-control" id="userinfo_department" defaultValue = {id.userinfo_department}> 
                 {/*<option value={department} id="department" name="department"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -196,6 +225,7 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_number"
                 placeholder="09123456789"
                 name="contactnumber"
+                defaultValue = {id.userinfo_number}
               />
             </div>
           </div>
@@ -211,15 +241,26 @@ function EditModal({show, handleClose, handleEdit}) {
                 id="userinfo_designation"
                 placeholder="Designation"
                 name="designation"
+                defaultValue = {id.userinfo_designation}
               />
             </div>
           </div>
         </div>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="success" onClick={handleEdit}>
+              {
+                loading ? 
+                <Button variant="success" onClick={onSubmit}>
+                  <span>
+                          <Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
+                        </span>
+                Submit
+                </Button>
+                :
+                <Button variant="success" onClick={onSubmit}>
                 Submit
               </Button>
+              }
               <Button variant="light" onClick={handleClose}>
                 Close
               </Button>
