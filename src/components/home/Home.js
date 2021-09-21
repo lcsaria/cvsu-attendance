@@ -31,7 +31,10 @@ function Home() {
       console.log(cvsuID+ " -> "+password)
       console.log("try")
       //api 
-      api.get(`login/${cvsuID}/${password}`)
+      api.post(`login`,{
+        cvsu_id: cvsuID,
+        password: password
+      })
       .then(response => {
         setLoading(false);
         console.log(JSON.stringify(response.data))
