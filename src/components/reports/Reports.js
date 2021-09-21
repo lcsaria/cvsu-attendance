@@ -27,7 +27,10 @@ const renderTable = () => {
   return data.map(user => {
     return (
       <tr key = {user.id}>
-        <td></td>
+        <td>{user.name}</td>
+        <td>{user.date}</td>
+        <td>{user.timein}</td>
+        <td>{user.timeout}</td>
       </tr>
     )
   })
@@ -99,12 +102,7 @@ return (
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Kaguya Shinomiya</td>
-              <td>2021-09-07</td>
-              <td>07:00 AM</td>
-              <td>06:00 PM</td>
-            </tr>
+            {renderTable()}
             
           </tbody>
           <tfoot>
