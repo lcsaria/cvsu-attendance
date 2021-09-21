@@ -37,7 +37,7 @@ function Home() {
         console.log(JSON.stringify(response.data))
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
-        localStorage.setItem('userType',response.data[0].user_type)
+        localStorage.setItem('userType',response.data)
         localStorage.setItem('isAuthenticated', true);
         console.log(localStorage.getItem('cvsuID'))
         console.log(localStorage.getItem('userType'))
