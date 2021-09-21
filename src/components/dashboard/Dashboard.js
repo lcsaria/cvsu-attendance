@@ -10,13 +10,11 @@ import SidebarUser from '../template/SidebarUser';
 var timecheck = false
 function Dashboard() {
   var today = new Date()
-  var dateTxt = ""
-  var datelong = ""
-  const [cvsuID, setcvsuID] = useState( localStorage.getItem('cvsuID') || '')
-  const [userData, setUserData] = useState('')
-  const [timetxt, setTimetxt] = useState('')
+  const cvsuID = localStorage.getItem('cvsuID') || ''
+  const [userData, setUserData] = useState("")
+  const [timetxt, setTimetxt] = useState("")
   const [timeintxt, setTimeintxt] = useState('TIME IN')
-  const [timeIn, setTimeIn] = useState('')
+  const [timeIn, setTimeIn] = useState("")
   const [attendance, setAttendance] = useState([])
   const [loading, setLoading] = useState(false)
   
@@ -34,10 +32,11 @@ function Dashboard() {
     console.log(date)
   }
 
-  const getUserTime = () => {
-    api.get(`attendance/${cvsuID}`)
-    .then(response => {
-      console.log('response : ', response.data)
+  const getUserTime = async () => {
+    const response = await api.get(`attendance/${cvsuID}`).catch((err) => {
+      console.log('error : ', err)
+    })
+    if( response && response.data) {
       setTimeIn(response.data)
       if (!response.data[0].timeout){
         setTimeintxt("TIME OUT")
@@ -47,38 +46,28 @@ function Dashboard() {
         setTimeintxt("TIME IN")
         timecheck = false
       }
-    })
-    .catch((err) => {
-      console.log('error : ',err)
-    })
+    }
   }
 
   // react hooks for preload data.
   useEffect(() => {
-    // get data
-    
     console.log(localStorage.getItem("userType"))
+    
     const retrieveall = async () => {
-      await api.get(cvsuID)
-      .then(response => {
-        console.log('response : ', response.data)
+      var response = await api.get(cvsuID).catch((err) => {
+        console.log('error : ', err)
+      })
+      if (response && response.data)
         setUserData(response.data)
-      })
-      .catch((err) => {
-        console.log('error : ',err)
-      })
-    }
-    const retrieveuserattendance = async () => {
-      await api.get(`attendance/getuser/${cvsuID}`)
-      .then (response => {
-        console.log('attendance data : ',response.data)
-        setAttendance(response.data)
-      })
-      .catch((err) => {
-        console.log('error at : ',err)
-      })
     }
 
+    const retrieveuserattendance = async () => {
+      var response = await api.get(`attendance/getuser/${cvsuID}`).catch((err) => {
+        console.log('error : ', err)
+      })
+      if (response && response.data)
+        setAttendance(response.data)
+    }
     // get time
     retrieveall()
     retrieveuserattendance()
@@ -91,16 +80,18 @@ function Dashboard() {
 
   // time in or out 
   const timeInorOut = async () => {
+    let fullname = userData[0].userinfo_fname + " " + userData[0].userinfo_lname;
     if (!timecheck) {
       console.log("TIME IN!", timecheck)
       setLoading(true)
-      await api.post(`attendance/${cvsuID}`)
+      await api.post(`attendance/${cvsuID}/${fullname}`)
       .then(response => {
         timecheck = true
         setTimeintxt("TIME OUT")
         alert("Time in success!")
         getUserTime()
         setLoading(false)
+        window.location.reload(false) // reload
       })
       .catch((err) => {
         alert(err.response.data)
@@ -117,6 +108,7 @@ function Dashboard() {
         alert("Time out success!")
         getUserTime()
         setLoading(false)
+        window.location.reload(false) // reload
       })
       .catch((err) => {
         alert(err.response.data)

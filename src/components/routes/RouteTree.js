@@ -7,6 +7,7 @@ import Home from "../home/Home.js"
 import ManageUser from '../manage-user/ManageUser.js'
 import Profile from '../profile/Profile.js'
 import Reports from '../reports/Reports.js'
+import ProtectedRoute from './ProtectedRoute.js'
 
 function RouteTree() {
     return (
@@ -14,12 +15,12 @@ function RouteTree() {
             <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/login" component={Home}/>
-                <Route exact path="/dashboard" component={Dashboard}/>
-                <Route exact path="/profile" component={Profile}/>
-                <Route exact path="/history" component={History}/>
-                <Route exact path="/add-user" component={AddUser}/>
-                <Route exact path="/manage-user" component={ManageUser}/>
-                <Route exact path="/reports" component={Reports}/>
+                <ProtectedRoute exact path="/dashboard" component={Dashboard}/>
+                <ProtectedRoute exact path="/profile" component={Profile}/>
+                <ProtectedRoute exact path="/history" component={History}/>
+                <ProtectedRoute exact path="/add-user" component={AddUser}/>
+                <ProtectedRoute exact path="/manage-user" component={ManageUser}/>
+                <ProtectedRoute exact path="/reports" component={Reports}/>
             </Switch>
         </div>
     )

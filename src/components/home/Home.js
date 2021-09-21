@@ -31,15 +31,20 @@ function Home() {
       console.log(cvsuID+ " -> "+password)
       console.log("try")
       //api 
-      api.get(`login/${cvsuID}/${password}`)
+      api.post(`login`,{
+        cvsu_id: cvsuID,
+        password: password
+      })
       .then(response => {
         setLoading(false);
         console.log(JSON.stringify(response.data))
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
-        localStorage.setItem('userType',response.data[0].user_type)
+        localStorage.setItem('userType',response.data)
+        localStorage.setItem('isAuthenticated', true);
         console.log(localStorage.getItem('cvsuID'))
         console.log(localStorage.getItem('userType'))
+        console.log(localStorage.getItem('isAuthenticated'))
         window.location.href='/dashboard';
       })
       .catch((err) => 
