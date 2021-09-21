@@ -120,11 +120,12 @@ return (
               <input
                 onChange={(e) => handle(e)}
                 className="form-control"
-                type="password"
+                type= 'password'
                 maxLength="4"
                 id="password"
                 placeholder="0000"
                 name="pincode"
+
               />
             </div>
           </div>
