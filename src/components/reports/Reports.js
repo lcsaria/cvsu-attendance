@@ -8,6 +8,11 @@ import SidebarHR from '../template/SidebarHR'
 
 function Reports() {
 const [data, setData] = useState([])
+const [searchTerm, setSearchTerm] = useState("");
+
+const search = (e) => {
+  setSearchTerm(e.target.value);
+}
 
 useEffect(() => {
   
@@ -24,7 +29,13 @@ useEffect(() => {
 },[])
 
 const renderTable = () => {
-  return data.map(user => {
+  return data.filter((user) => {
+    if (searchTerm === "") {
+      return user;
+    } else if (user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return user;
+    }
+  }).map(user => {
     return (
       <tr key = {user.id}>
         <td>{user.name}</td>
@@ -81,6 +92,7 @@ return (
                 className="form-control form-control-sm"
                 aria-controls="dataTable"
                 placeholder="Search"
+                onChange={search}
               />
             </label>
           </div>
