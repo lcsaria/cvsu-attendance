@@ -36,42 +36,17 @@ const [data, setData] = useState({
   userinfo_number : '',
 })
 
-const submitlogin = async (e) => {
-  await api.post('addlogin',{
-    cvsu_id: data.cvsu_id,
-    password: data.password,
-  })
-  .then(res => {
-    console.log('response : ', res.data)
-  })
-  .catch((err) => {
-    console.log('error : ', err)
-  })
-}
-
 const submit = async (e) => {
   e.preventDefault();
   if (!data.userinfo_fname || !data.userinfo_lname || !data.userinfo_email || !data.userinfo_number || !data.userinfo_designation || !data.cvsu_id || !data.password) 
   return alert("please fill all field with *")
-  var gender = document.getElementById('userinfo_gender').value
-  var department = document.getElementById('userinfo_department').value
-  console.log('test gender : ', gender)
-  console.log('test department : ', department)
+  data.userinfo_gender = document.getElementById('userinfo_gender').value
+  data.userinfo_department = document.getElementById('userinfo_department').value
   // CONNECT TO API
-  await api.post('',{
-    cvsu_id: data.cvsu_id,
-    userinfo_fname: data.userinfo_fname,
-    userinfo_mname: data.userinfo_mname,
-    userinfo_lname: data.userinfo_lname,
-    userinfo_gender: gender,
-    userinfo_designation: data.userinfo_designation,
-    userinfo_email: data.userinfo_email,
-    userinfo_department: department,
-    userinfo_number : data.userinfo_mname,
-  })
+  await api.post('',data)
   .then(res => {
     console.log('response : ',res.data)
-    submitlogin()
+    //submitlogin()
     alert('User Added Successful!')
     window.location.reload(false) // reload
   })
