@@ -8,6 +8,7 @@ import api from '../../api/axios'
 import { Spinner } from 'react-bootstrap';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
+import ResetModal from './ResetModal';
 // import { useFormState } from 'react-hook-form'
 
 function ManageUser() {
@@ -15,11 +16,12 @@ function ManageUser() {
   const [data, setData] = useState([]);
   let [update, setUpdate] = useState({});
   let [del, setDel] = useState({});
+  let [rst, setRst] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDel, setShowDel] = useState(false);
   const [showEdt, setShowEdt] = useState(false);
-
+  const [showRst, setShowRst] = useState(false);
 
   const search = (e) => {
     setSearchTerm(e.target.value);
@@ -60,6 +62,15 @@ function ManageUser() {
             >
               <i className="fa fa-trash" title="Delete" />
             </button>
+            <button
+              className="btn btn-light btn-sm"
+              type="button"
+              style={{ width: 40, height: 30, marginLeft: 10 }}
+              title="Reset Password"
+              onClick={() => showReset(user)}
+            >
+              <i className="fa fa-user-lock" title="Reset Password" />
+            </button>
           </td>
         </tr>
       )
@@ -67,21 +78,26 @@ function ManageUser() {
   }
 
   const handleClose = () => {
-    setShowDel(false);
-    setShowEdt(false);
+    setShowDel(false)
+    setShowEdt(false)
+    setShowRst(false)
   }
   
   const showEdit = (id) => {
-    setUpdate(id);
-    setShowEdt(true);
+    setUpdate(id)
+    setShowEdt(true)
   }
-
 
   const showDelete = (id) => {
-    setDel(id);
-    setShowDel(true);
+    setDel(id)
+    setShowDel(true)
   }
   
+  const showReset = (id) => {
+    setRst(id)
+    setShowRst(true)
+  }
+
   const handleEdit = () => {
     //LOGIC
     alert("User update successfully");
@@ -91,6 +107,12 @@ function ManageUser() {
   const handleDelete = () => {
     //LOGIC
     alert("User delete successfully");
+    setShowDel(false);
+  }
+
+  const handleReset = () => {
+    //LOGIC
+    alert("Password reset successfully");
     setShowDel(false);
   }
 
@@ -202,7 +224,8 @@ function ManageUser() {
       <Footer/>
     </div>
     <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose} id={update}/>   
-    <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose} del={del}/>            
+    <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose} del={del}/>   
+    <ResetModal show={showRst} handleReset={handleReset} handleClose={handleClose} res={rst}/>           
   </div>
       )
   }

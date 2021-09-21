@@ -28,42 +28,24 @@ function EditModal({show, handleClose, handleEdit, id}) {
   { label: "Admin Office", value: "Admin Office" },
   ]
   
-  
-  const [data, setData] = useState({
-  cvsuidnumber: '',
-  userinfo_fname: '',
-  userinfo_mname: '',
-  userinfo_lname: '',
-  userinfo_gender: '',
-  userinfo_designation: '',
-  userinfo_email: '',
-  userinfo_department: '',
-  userinfo_number : '',
-  })
-  
-
-  const handle = (e) => {
-    setData({...data,
-      [e.target.name]: e.target.value});
-    console.log(data)
-  }
 
   const onSubmit = (e) => {
     setLoading(true);
-   
-
-    const userdatasave = async () => {
-      await api.put(`${id.cvsu_id}`,{
-        cvsuidnumber: `${data.cvsuidnumber}`,
-        userinfo_fname: `${data.userinfo_fname}`,
-        userinfo_mname: `${data.userinfo_mname}`,
-        userinfo_lname: `${data.userinfo_lname}`,
-        userinfo_gender: `${data.userinfo_gender}`,
-        userinfo_email: `${data.userinfo_email}`,
-        userinfo_number : `${data.userinfo_number}`,
-        userinfo_designation: `${data.userinfo_designation}`,
-        userinfo_department: `${data.userinfo_department}`,
-      })
+    let cvsuid = id.cvsu_id
+    let data = {
+      cvsu_id: document.getElementById('cvsu_id').value,
+      userinfo_fname: document.getElementById("firstname").value,
+      userinfo_mname: document.getElementById("middlename").value,
+      userinfo_lname: document.getElementById("lastname").value,
+      userinfo_gender: document.getElementById("gender").value,
+      userinfo_email: document.getElementById("emailaddress").value,
+      userinfo_number : document.getElementById("mobilenumber").value,
+      userinfo_designation: document.getElementById("designation").value,
+      userinfo_department: document.getElementById("department").value
+    }
+    console.log(cvsuid);
+    const datasave = async () => {
+      await api.put(`${cvsuid}`, {data})
       .then(response => {
         console.log('response : ', response.status)
         handleEdit();
@@ -76,8 +58,7 @@ function EditModal({show, handleClose, handleEdit, id}) {
         alert(`Can't process your request. please try again later.`)
       })
     }
-    userdatasave()
-    setLoading(false);
+    datasave()
     
   }
     return (
@@ -101,7 +82,6 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>CvSU ID Number*&nbsp;</strong>
               </label>
               <input
-                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
                 id="cvsu_id"
@@ -122,10 +102,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <br />
               </label>
               <input
-               onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="userinfo_fname"
+                id="firstname"
                 placeholder="First Name"
                 name="firstname"
                 defaultValue = {id.userinfo_fname}
@@ -138,10 +117,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Middle Name</strong>
               </label>
               <input
-                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="userinfo_mname"
+                id="middlename"
                 placeholder="Middle Name"
                 name="middlename"
                 defaultValue = {id.userinfo_mname}
@@ -154,10 +132,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Last Name*</strong>
               </label>
               <input
-                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="userinfo_lname"
+                id="lastname"
                 placeholder="Last Name"
                 name="lastname"
                 defaultValue = {id.userinfo_lname}
@@ -170,7 +147,7 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Gender</strong>
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_gender" defaultValue={id.userinfo_gender}> 
+              <select className="form-control" id="gender" defaultValue={id.userinfo_gender}> 
                   {/*<option value={gender} id="gender"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -186,10 +163,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Email Address*</strong>
               </label>
               <input
-                onChange={(e) => handle(e)}
                 className="form-control"
                 type="email"
-                id="userinfo_email"
+                id="emailaddress"
                 placeholder="user@cvsu.edu.ph"
                 name="emailaddress"
                 defaultValue = {id.userinfo_email}
@@ -203,7 +179,7 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <br />
               </label>
               <div className="dropdown">
-              <select className="form-control" id="userinfo_department" defaultValue = {id.userinfo_department}> 
+              <select className="form-control" id="department" defaultValue = {id.userinfo_department}> 
                 {/*<option value={department} id="department" name="department"> -- </option>
                       {/* Mapping through each fruit object in our fruits array
                     and returning an option element with the appropriate attributes / values.
@@ -219,10 +195,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Contact Number*</strong>
               </label>
               <input
-               onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="userinfo_number"
+                id="mobilenumber"
                 placeholder="09123456789"
                 name="contactnumber"
                 defaultValue = {id.userinfo_number}
@@ -235,10 +210,9 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 <strong>Designation*</strong>
               </label>
               <input
-                onChange={(e) => handle(e)}
                 className="form-control"
                 type="text"
-                id="userinfo_designation"
+                id="designation"
                 placeholder="Designation"
                 name="designation"
                 defaultValue = {id.userinfo_designation}
