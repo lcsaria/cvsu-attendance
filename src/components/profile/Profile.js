@@ -9,39 +9,91 @@ import SidebarUser from '../template/SidebarUser';
 import SidebarHR from '../template/SidebarHR';
 
 var editcheck = true;
+
 function Profile() {
   const cvsuID = localStorage.getItem('cvsuID') || ''
   // eslint-disable-next-line no-unused-vars
   const [userData, setUserData] = useState('')
   const [edit, setEdit] = useState('Edit Infomation')
- 
-  useEffect(() => {
-    const retrievedata = async () => {
-      const response = await api.get(cvsuID).catch((err) => {
-        console.log('error : ', err)
-      })
-      if (response && response.data) {
-        setUserData(response.data)
-      }
-    }
-    retrievedata()
-  },[])
-
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({
+    fname: "",
+    mname: "",
+    lname: "",
+    email: ""
+  })
+
+  const gen = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" }
+  ]
 
   // change photo
   const changePhoto = () => {
     alert("This function is not available right now.")
   }
+
+  // change stats
   const changestats = () => {
     document.getElementById("firstname").readOnly = editcheck
     document.getElementById("middlename").readOnly = editcheck
     document.getElementById("lastname").readOnly = editcheck
-    document.getElementById("gender").readOnly = editcheck
+    document.getElementById("gender").disabled = editcheck
     document.getElementById("emailaddress").readOnly = editcheck
     document.getElementById("mobilenumber").readOnly = editcheck
+    
   }
 
+  const validateEmail = (email) => {
+    const r = /^\S+@\S+\.\S+$/
+    return r.test(email);
+  }
+
+  const onChange = (e) => {
+    console.log(e.target.name)
+    console.log(error)
+    if (e.target.name === "firstname") {
+      if (e.target.value === "") {
+        setError({...error, fname: "First name is required"})
+      } else {
+        setError({...error, fname: ""})
+      }
+    } 
+
+    if (e.target.name === "lastname") {
+      if (e.target.value === "") {
+        setError({...error, lname: "Last name is required"})
+      } else {
+        setError({...error, lname: ""})
+      }
+    } 
+    
+    if (e.target.name === "address"){
+      if (e.target.value === ""){
+        setError({...error, email: "Email is required"})
+      } else if (!validateEmail(e.target.value)){
+        setError({...error, email: "Invalid email"})
+      } else {
+        setError({...error, email: ""})
+      }
+    }
+  }
+
+  const userCheck = () => {
+    setLoading(false);
+    let fname = document.getElementById("firstname").value
+    let lname = document.getElementById("lastname").value
+    let email = document.getElementById("emailaddress").value
+    if (fname === "" && lname === "" && email === ""){
+      setError({...error,fname: "First name is required"})
+      setError({...error,lname: "Last name is required"})
+      setError({...error,email: "Email is required"})
+    } else if (!validateEmail(email)){
+      setError({...error,email: "Invalid email"})
+    }else {
+      usersave()
+    }
+  }
   // save user info
   const usersave = () => {
     setLoading(true);
@@ -53,6 +105,7 @@ function Profile() {
     let number = document.getElementById("mobilenumber").value
     let designation = document.getElementById("designation").value
     let department = document.getElementById("department").value
+
 
     const userdatasave = async () => {
       await api.put(`${cvsuID}`,{
@@ -83,7 +136,6 @@ function Profile() {
       })
     }
     userdatasave()
-    
   }
 
   // save contact info
@@ -115,6 +167,20 @@ function Profile() {
       })
     }
     retrievedata()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
+  useEffect(() => {
+    const retrievedata = async () => {
+      const response = await api.get(cvsuID).catch((err) => {
+        console.log('error : ', err)
+      })
+      if (response && response.data) {
+        setUserData(response.data)
+      }
+    }
+    retrievedata()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
@@ -181,17 +247,22 @@ function Profile() {
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor="username">
-                      <strong>First Name</strong>
+                      <strong>First Name*</strong>
                     </label>
                     <input
-                      className="form-control"
+                      className="form-control mb-2"
                       type="text"
                       id="firstname"
                       placeholder="First Name"
                       name="firstname"
                       defaultValue= {userData ? userData[0].userinfo_fname : ''}
+                      onChange={onChange}
                       readOnly
                     />
+                    {
+                      (!error.fname) ? null :
+                      <span className="ml-3 m-3 text-danger">{error.fname}</span>
+                    }
                   </div>
                 </div>
                 <div className="col">
@@ -200,11 +271,12 @@ function Profile() {
                       <strong>Middle Name</strong>
                     </label>
                     <input
-                      className="form-control"
+                      className="form-control mb-2"
                       type="text"
                       id="middlename"
                       placeholder="Middle Name"
                       name="middlename"
+                      onChange={onChange}
                       defaultValue= {userData ? userData[0].userinfo_mname : ''}
                       readOnly
                     />
@@ -215,34 +287,37 @@ function Profile() {
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor="first_name">
-                      <strong>Last Name</strong>
+                      <strong>Last Name*</strong>
                       <br />
                     </label>
                     <input
-                      className="form-control"
+                      className="form-control mb-2"
                       type="text"
                       id="lastname"
                       placeholder="Last Name"
                       name="lastname"
+                      onChange={onChange}
                       defaultValue= {userData ? userData[0].userinfo_lname : ''}
                       readOnly
                     />
                   </div>
+                  {
+                      (!error.lname) ? null :
+                      <span className="ml-3 m-3 text-danger">{error.lname}</span>
+                  }
                 </div>
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor="last_name">
                       <strong>Gender</strong>
                     </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="gender"
-                      placeholder="Gender"
-                      name="gender"
-                      defaultValue= {userData ? userData[0].userinfo_gender : ''}
-                      readOnly
-                    />
+                    <select className="form-control" id="gender" disabled> 
+                  {/*<option value={gender} id="gender"> -- </option>
+                      {/* Mapping through each fruit object in our fruits array
+                    and returning an option element with the appropriate attributes / values.
+                  */}
+                {gen.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
+              </select>
                   </div>
                 </div>
               </div>
@@ -263,17 +338,24 @@ function Profile() {
                     <div className="col">
                       <div className="form-group">
                         <label htmlFor="address">
-                          <strong>Email Address</strong>
+                          <strong>Email Address*</strong>
                         </label>
                         <input
-                          className="form-control"
+                          className="form-control mb-2"
                           type="text"
                           id="emailaddress"
                           placeholder="user@cvsu.edu.ph"
                           name="address"
+                          onChange={onChange}
                           defaultValue= {userData ? userData[0].userinfo_email : ''}
                           readOnly
+                          autofill="off"
+                          
                         />
+                        {
+                          (!error.email) ? null :
+                          <span className="ml-3 m-3 text-danger">{error.email}</span>
+                        }
                       </div>
                     </div>
                     <div className="col">
@@ -282,11 +364,12 @@ function Profile() {
                           <strong>Department</strong>
                         </label>
                         <input
-                          className="form-control"
+                          className="form-control mb-2"
                           type="text"
                           id="department"
                           placeholder="Department"
                           name="department"
+                          onChange={onChange}
                           defaultValue= {userData ? userData[0].userinfo_department : ''}
                           readOnly
                         />
@@ -301,14 +384,20 @@ function Profile() {
                           <br />
                         </label>
                         <input
-                          className="form-control"
+                          className="form-control mb-2"
                           type="text"
                           id="mobilenumber"
                           placeholder="Mobile Number"
                           name="mobilenumber"
+                          onChange={onChange}
                           defaultValue= {userData ? userData[0].userinfo_number : ''}
                           readOnly
+                          maxLength={11}
                         />
+                        {
+                          (!error.number) ? null :
+                          <span className="ml-3 m-3 text-danger">{error.number}</span>
+                        }
                       </div>
                     </div>
                     <div className="col">
@@ -317,11 +406,12 @@ function Profile() {
                           <strong>Designation</strong>
                         </label>
                         <input
-                          className="form-control"
+                          className="form-control mb-2"
                           type="text"
                           id="designation"
                           placeholder="Designation"
                           name="designation"
+                          onChange={onChange}
                           defaultValue= {userData ? userData[0].userinfo_designation : ''}
                           readOnly
                         />
@@ -331,7 +421,7 @@ function Profile() {
                   <div className="form-group">
                     <button
                       className="btn btn-lg"
-                      onClick = {editcheck ? goedit : usersave}
+                      onClick = {editcheck ? goedit : userCheck}
                       style={{ background: "#75a478", color: "rgb(255,255,255)" }}
                       disabled={loading}
                     >
