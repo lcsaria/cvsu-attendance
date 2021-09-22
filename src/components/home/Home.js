@@ -7,6 +7,12 @@ function Home() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const onChangePassword = (e) => {
+      const value = e.target.value.replace(/\D/g, "");
+      setPassword(value)
+      console.log(value)
+   }
+
     const submit = (e) => {
       setLoading(true);
       checkCredentials(e);
@@ -100,7 +106,9 @@ function Home() {
                             name="password"
                             inputMode="numeric"
                             maxLength="4"
-                            onChange={(e)=>setPassword(e.target.value)}
+                            pattern="[0-9]*"
+                            onChange={onChangePassword}
+                            value={password}
                           />
                         </div>
                         <div className="form-group">
