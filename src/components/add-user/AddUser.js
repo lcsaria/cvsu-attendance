@@ -1,4 +1,5 @@
 import React from 'react'
+import * as ReactBootstrap from 'react-bootstrap';
 import { useState } from 'react/cjs/react.development'
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
@@ -36,25 +37,150 @@ const [data, setData] = useState({
   userinfo_number : '',
 })
 
-const submit = async (e) => {
-  e.preventDefault();
-  if (!data.userinfo_fname || !data.userinfo_lname || !data.userinfo_email || !data.userinfo_number || !data.userinfo_designation || !data.cvsu_id || !data.password) 
-  return alert("please fill all field with *")
-  data.userinfo_gender = document.getElementById('userinfo_gender').value
-  data.userinfo_department = document.getElementById('userinfo_department').value
+const [error, setError] = useState({
+  cvsuID: "",
+  password: "",
+  fname: "",
+  lname: "",
+  email: "",
+  designation: ""
+})
+
+const [loading, setLoading] = useState(false);
+
+const validate = () => {
+    let cvsuID = document.getElementById("cvsu_id").value
+    let password = document.getElementById("password").value
+    let fname = document.getElementById("userinfo_fname").value
+    let lname = document.getElementById("userinfo_lname").value
+    let email = document.getElementById("userinfo_email").value
+    let designation = document.getElementById("userinfo_designation").value
+    
+    if (!cvsuID && !password && !fname && !lname && !email && !designation){
+      setError({...error, 
+        cvsuID:"CvSU ID is required", 
+        password: "Password is required",
+        fname: "First name is required",
+        lname: "Last name is required",
+        email: "Email is required",
+        designation: "Designation is required"
+      })
+    } else {
+      if (!password && !password && !fname && !lname && !email && !designation) {
+        setError({...error, 
+          cvsuID:"", 
+          password: "Password is required",
+          fname: "First name is required",
+          lname: "Last name is required",
+          email: "Email is required",
+          designation: "Designation is required"
+        })
+      } else {
+        if (!fname && !lname && !email && !designation) {
+          setError({...error, 
+            cvsuID:"", 
+            password: "",
+            fname: "First name is required",
+            lname: "Last name is required",
+            email: "Email is required",
+            designation: "Designation is required"
+          })
+        } else {
+          if (!lname && !email && !designation) {
+            setError({...error, 
+              cvsuID:"", 
+              password: "",
+              fname: "",
+              lname: "Last name is required",
+              email: "Email is required",
+              designation: "Designation is required"
+            })
+          } else {
+            if (!email && !designation) {
+              setError({...error, 
+                cvsuID:"", 
+                password: "",
+                fname: "",
+                lname: "",
+                email: "Email is required",
+                designation: "Designation is required"
+              })
+            } else {
+              if (!designation) {
+                setError({...error, 
+                  cvsuID:"", 
+                  password: "",
+                  fname: "",
+                  lname: "",
+                  email: "",
+                  designation: "Designation is required"
+                })
+              } else {
+                  if (!validateEmail(email)){
+                    setError({...error, 
+                      cvsuID:"", 
+                      password: "",
+                      fname: "",
+                      lname: "",
+                      email: "Invalid email",
+                      designation: ""
+                    })
+                  } else {
+                    setError({
+                      cvsuID:"", 
+                      password: "",
+                      fname: "",
+                      lname: "",
+                      email: "",
+                      designation: ""
+                    })
+                    setLoading(true);
+                    submit()
+                  }
+                }
+              }
+            }
+          }
+        }
+      }  
+    
+}
+
+const submit = async () => {
   // CONNECT TO API
   await api.post('',data)
   .then(res => {
     console.log('response : ',res.data)
     //submitlogin()
     alert('User Added Successful!')
+    setLoading(false)
     window.location.reload(false) // reload
   })
   .catch((err) => {
     console.log('error : ', err)
+    setLoading(false)
     alert('User already exist!')
     return
   })
+  
+}
+
+const validateEmail = (email) => {
+  const r = /^\S+@\S+\.\S+$/
+  return r.test(email);
+}
+
+const onhandlePassword = (e) => {
+  const value = e.target.value.replace(/\D/g, "");
+  setData({...data, password: value})
+  console.log(data)
+  if (value === ""){
+    setError({...error, password: "Password is required"})
+  } else if (value.length < 4){
+    setError({...error, password: "Password must be at least 4 character"})
+  } else {
+    setError({...error,password: ""})
+  }
   
 }
 
@@ -62,6 +188,56 @@ const handle = (e) => {
   const newdata = { ...data }
   newdata[e.target.id] = e.target.value
   setData(newdata)
+  if (e.target.id === "cvsu_id"){
+    if (e.target.value === "") {
+      setError({...error, cvsuID: "CvSU ID is required"})
+    } else {
+      setError({...error, cvsuID: ""})
+    }
+  }
+
+  if (e.target.id === "password"){
+    if (e.target.value === "") {
+      setError({...error, password: "Password is required"})
+    } else {
+      setError({...error, password: ""})
+    }
+  }
+
+  if (e.target.id === "userinfo_fname"){
+    if (e.target.value === "") {
+      setError({...error, fname: "First Name is required"})
+    } else {
+      setError({...error, fname: ""})
+    }
+  }
+
+  if (e.target.id === "userinfo_lname"){
+    if (e.target.value === "") {
+      setError({...error, lname: "Last Name is required"})
+    } else {
+      setError({...error, lname: ""})
+    }
+  }
+
+  if (e.target.id === "userinfo_email"){
+    if (e.target.value === ""){
+      setError({...error, email: "Email is required"})
+    } else if (!validateEmail(e.target.value)){
+      setError({...error, email: "Invalid email"})
+    } else {
+      setError({...error, email: ""})
+    }
+  }
+
+  if (e.target.id === "userinfo_designation"){
+    if (e.target.value === "") {
+      setError({...error, designation: "Designation is required"})
+    } else {
+      setError({...error, designation: ""})
+    }
+  }
+
   console.log(newdata)
 }
 
@@ -92,45 +268,54 @@ return (
   </div>
   <div className="card shadow">
     <div className="card-body">
-      <form onSubmit={(e) => submit(e)}>
         <h4>Login details</h4>
         <hr />
         <div className="form-row">
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="cvsuidnumber">
                 <strong>CvSU ID Number*&nbsp;</strong>
               </label>
               <input
                 onChange={(e) => handle(e)}
-                className="form-control"
+                className="form-control mb-3"
                 type="text"
                 id="cvsu_id"
                 placeholder="CvSU ID Number"
                 name="cvsuidnumber"
               />
             </div>
+            {
+              (!error.cvsuID) ? null 
+              :
+              <span className="ml-3 text-danger">{error.cvsuID}</span>
+            }
           </div>
           <div className="col-md-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="pincode">
                 <strong>4 Digit Pin Code*</strong>
                 <br />
               </label>
               <input
-                onChange={(e) => handle(e)}
-                className="form-control"
+                onChange={onhandlePassword}
+                className="form-control mb-3"
                 type= 'password'
                 maxLength="4"
                 id="password"
                 placeholder="0000"
                 name="pincode"
-
+                value={data.password}
               />
+              {
+                (!error.password) ? null 
+                :
+                <span className="ml-3 text-danger">{error.password}</span>
+              }
             </div>
           </div>
         </div>
-        <h4>Personal details</h4>
+        <h4 className="mt-3">Personal details</h4>
         <hr />
         <div className="form-row">
           <div className="col-lg-6">
@@ -141,16 +326,21 @@ return (
               </label>
               <input
                onChange={(e) => handle(e)}
-                className="form-control"
+                className="form-control mb-3"
                 type="text"
                 id="userinfo_fname"
                 placeholder="First Name"
                 name="firstname"
               />
+              {
+                (!error.fname) ? null 
+                :
+                <span className="ml-3 text-danger">{error.fname}</span>
+              }              
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="middlename">
                 <strong>Middle Name</strong>
               </label>
@@ -165,22 +355,27 @@ return (
             </div>
           </div>
           <div className="col-lg-6 col-xl-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="lastname">
                 <strong>Last Name*</strong>
               </label>
               <input
                 onChange={(e) => handle(e)}
-                className="form-control"
+                className="form-control mb-3"
                 type="text"
                 id="userinfo_lname"
                 placeholder="Last Name"
                 name="lastname"
               />
+              {
+                (!error.lname) ? null 
+                :
+                <span className="ml-3 text-danger">{error.lname}</span>
+              }
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="gender">
                 <strong>Gender</strong>
               </label>
@@ -196,22 +391,27 @@ return (
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="emailaddress">
                 <strong>Email Address*</strong>
               </label>
               <input
                 onChange={(e) => handle(e)}
-                className="form-control"
+                className="form-control mb-3"
                 type="email"
                 id="userinfo_email"
                 placeholder="user@cvsu.edu.ph"
                 name="emailaddress"
               />
+              {
+                (!error.email) ? null 
+                :
+                <span className="ml-3 text-danger">{error.email}</span>
+              }
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="department">
                 <strong>Department</strong>
                 <br />
@@ -228,9 +428,9 @@ return (
             </div>
           </div>
           <div className="col-lg-6 col-xl-6">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="contactnumber">
-                <strong>Contact Number*</strong>
+                <strong>Contact Number</strong>
               </label>
               <input
                onChange={(e) => handle(e)}
@@ -240,40 +440,60 @@ return (
                 placeholder="09123456789"
                 name="contactnumber"
               />
+
             </div>
           </div>
           <div className="col">
-            <div className="form-group">
+            <div className="form">
               <label htmlFor="designation">
                 <strong>Designation*</strong>
               </label>
               <input
                 onChange={(e) => handle(e)}
-                className="form-control"
+                className="form-control mb-3"
                 type="text"
                 id="userinfo_designation"
                 placeholder="Designation"
                 name="designation"
               />
+              {
+                (!error.designation) ? null 
+                :
+                <span className="ml-3 text-danger">{error.designation}</span>
+              }
             </div>
           </div>
         </div>
-        <div className="form-group">
+        <div className="form">
           <button
             className="btn btn-sm"
-            type="submit"
             style={{
               background: "#75a478",
               color: "rgb(255,255,255)",
               width: "156.031px",
               height: 42
             }}
+            onClick={validate}
           >
-            <i className="fa fa-user-plus" />
-            &nbsp;ADD USER
+            {loading ?
+            <> 
+                <span>
+                  <ReactBootstrap.Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
+                </span>
+                <span>
+                  <i className="fa fa-user-plus" />
+                    &nbsp;ADD USER
+                 </span>
+            </>
+                      :
+              <span>
+                <i className="fa fa-user-plus" />
+                &nbsp;ADD USER
+              </span>
+            }
+            
           </button>
         </div>
-      </form>
     </div>
   </div>
 </div>

@@ -84,16 +84,30 @@ function Profile() {
     let fname = document.getElementById("firstname").value
     let lname = document.getElementById("lastname").value
     let email = document.getElementById("emailaddress").value
-    if (fname === "" && lname === "" && email === ""){
+    
+    if (!fname){
       setError({...error,fname: "First name is required"})
-      setError({...error,lname: "Last name is required"})
-      setError({...error,email: "Email is required"})
-    } else if (!validateEmail(email)){
-      setError({...error,email: "Invalid email"})
-    }else {
-      usersave()
-    }
-  }
+    } else {
+      if (!lname){
+        setError({...error,lname: "Last name is required"})
+      } else {
+        if (!lname){
+          setError({...error,lname: "Last name is required"})
+        } else {
+          if (!email){
+            setError({...error,email: "Email is required"})
+          } else {
+            if (!validateEmail(email)){
+              setError({...error,email: "Invalid email"})
+            }
+            else {
+              usersave()
+            }
+          }
+        }
+      }
+    } 
+}
   // save user info
   const usersave = () => {
     setLoading(true);
