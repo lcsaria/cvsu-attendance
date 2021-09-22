@@ -5,15 +5,28 @@ import api from '../../api/axios'
 
 function ResetModal({show, handleClose, handleReset, res}) {
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error_password, setError_password] = useState()
 
-
-
+  const onChangePassword = (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    setPassword(value)
+    console.log(value)
+    if (value === ""){
+      setError_password("")
+    } else if (value.length < 4){
+      setError_password("Password must be at least 4 character")
+    } else {
+      setError_password("")
+    }
+    
+ }
   
   const onReset = async () => {
     setLoading(true);
       let data = {
         cvsu_id: res.cvsu_id,
-        password: document.getElementById('password').value
+        password: password
       }
       console.log(data)
       const datasave = async () => {
@@ -61,7 +74,12 @@ function ResetModal({show, handleClose, handleReset, res}) {
                 id="password"
                 placeholder="0000"
                 name="pincode"
+                onChange={onChangePassword}
               />
+              {
+              (!error_password) ? null :
+                  <span className="ml-3 m-3 text-danger">{error_password}</span>
+              }                          
             </div>
           </div>
           </div>
