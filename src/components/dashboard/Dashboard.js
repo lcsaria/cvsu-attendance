@@ -193,7 +193,7 @@ return (
                   {loading ? (
                           <div>
                             <span>
-                            <ReactBootstrap.Spinner animation="grow" className="spinner-border spinner-border-xl mb-3"/>
+                            <ReactBootstrap.Spinner animation="grow" className="spinner-border spinner-border-xl mb-3 mr-3"/>
                             </span>
                             <span>{timeintxt}</span>
                           </div>
