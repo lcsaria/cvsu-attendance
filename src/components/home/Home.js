@@ -1,39 +1,77 @@
 import React, { useState }from 'react'
-import api from '../../api/axios';
-import * as ReactBootstrap from 'react-bootstrap';
+import * as ReactBootstrap from 'react-bootstrap'
+
+import api from '../../api/axios'
+
+
 
 function Home() {
     const [cvsuID, setcvsuID] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error_cvsuID, setError_cvsuID] = useState()
+    const [error_password, setError_password] = useState()
+    
+    const onChange = (e) => {
+      const value = e.target.value;
+      setcvsuID(value)
+      if (value === ""){
+        setError_cvsuID("")
+      } else if (value.length < 4){
+        setError_cvsuID("CvSU ID must be at least 4 characters")
+      } else {
+        setError_cvsuID("")
+      }
+    }
 
     const onChangePassword = (e) => {
       const value = e.target.value.replace(/\D/g, "");
       setPassword(value)
       console.log(value)
+      if (value === ""){
+        setError_password("")
+      } else if (value.length < 4){
+        setError_password("Password must be at least 4 character")
+      } else {
+        setError_password("")
+      }
+      
    }
 
-    const submit = (e) => {
-      setLoading(true);
-      checkCredentials(e);
+    const onSubmit = (data) => {
+      checkCredentials(data);
     }
-
+    
     const checkCredentials = (e) => {
+      e.preventDefault()
       if (!cvsuID){
-        alert("Enter your CvSU ID");
+        setError_cvsuID("CvSU ID is required")
         setLoading(false);
-      }
-      else if (!password){
-        alert("Enter your password");
+      } else if (cvsuID.length < 4){
+        setError_cvsuID("CvSU ID must be at least 4 characters")
         setLoading(false);
+      } else {
+        setError_cvsuID("")
       }
-      else {
+
+      if (!password){
+        setError_password("Password is required")
+        setLoading(false);
+      } else if (password.length < 4){
+        setError_password("Password must be at least 4 character")
+        setLoading(false);
+      } else {
+        setError_cvsuID("")
+        setError_password("")
         login(e);
+        console.log(error_cvsuID, error_password)
       }
+      
     }
 
     const login = (e) => {
       e.preventDefault();
+      setLoading(true);
       console.log(cvsuID+ " -> "+password)
       console.log("try")
       //api 
@@ -84,22 +122,29 @@ function Home() {
                       <div className="text-center">
                         <h4 className="text-dark mb-4">Welcome Back!</h4>
                       </div>
-                      <form className="user">
+                        <form className="user">
                         <div className="form-group">
                           <input
-                            className="form-control form-control-user"
+                            className="form-control form-control-user mb-2"
                             type="text"
                             id="exampleInputEmail"
                             aria-describedby="emailHelp"
                             placeholder="Enter CvSU ID"
                             name="cvsuid"
-                            onChange={(e)=>setcvsuID(e.target.value)}
+                            onChange={onChange}
                             autoFocus
+                            autocomplete="off"
+                            autofill={false}
+                            value={cvsuID}
                           />
+                          {
+                            (!error_cvsuID) ? null :
+                            <span className="ml-3 m-3 text-danger">{error_cvsuID}</span>
+                          }
                         </div>
                         <div className="form-group">
                           <input
-                            className="form-control form-control-user"
+                            className="form-control form-control-user mb-2"
                             type="password"
                             id="exampleInputPassword"
                             placeholder="4 Digit Pin"
@@ -107,9 +152,15 @@ function Home() {
                             inputMode="numeric"
                             maxLength="4"
                             pattern="[0-9]*"
+                            autocomplete="off"
+                            autofill={false}
                             onChange={onChangePassword}
                             value={password}
                           />
+                          {
+                            (!error_password) ? null :
+                            <span className="ml-3 m-3 text-danger">{error_password}</span>
+                          }
                         </div>
                         <div className="form-group">
                           <div className="custom-control custom-checkbox small">
@@ -129,7 +180,7 @@ function Home() {
                           </div>
                         </div>
                         <button
-                          onClick={(e)=>submit(e)}
+                          onClick={onSubmit}
                           className="btn btn-success btn-block text-white btn-user"
                           disabled={loading}
                           //role="button"
@@ -148,7 +199,7 @@ function Home() {
                         }
                         </button>
                         <hr />
-                      </form>
+                      </form> 
                     </div>
                   </div>
                 </div>
