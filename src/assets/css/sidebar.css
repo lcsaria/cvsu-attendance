@@ -92,3 +92,19 @@
   background:#6cf;
 }
 
+@media screen and (max-width: 600px) { 
+.Sidebar{
+  width: 55px;
+}
+
+.Sidebar .sidebar-icon{
+  margin-right: 0;
+}
+
+.Sidebar .sidebar-text,
+.Sidebar .sidebar-logo {
+  display: none;
+}
+  
+  
+  }
