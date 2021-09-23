@@ -162,7 +162,7 @@ function Profile() {
 
   useEffect(() => {
     const retrievedata = async () => {
-      await api.get(cvsuID)
+      await api.get(`getuser/${cvsuID}`)
       .then(response => {
         var ror = response.data
         console.log('res : ',ror[0].userinfo_fname)

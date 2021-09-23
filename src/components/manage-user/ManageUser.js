@@ -118,14 +118,13 @@ function ManageUser() {
 
   useEffect(() => {
     const retrieve = async () => {
-      await api.get('')
+      await api.get('manage')
       .then(response => {
         console.log('response : ', response.data)
         setData(response.data)
         if (data) {
           setLoading(true);
-        }
-        
+        }  
       })
       .catch((err) => {
         console.log('error : ',err)

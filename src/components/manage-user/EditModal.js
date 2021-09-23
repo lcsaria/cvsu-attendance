@@ -9,6 +9,7 @@ ISSUE
 
 import React, { useState } from 'react'
 import { Modal, Button, Spinner } from 'react-bootstrap';
+import { useEffect } from 'react/cjs/react.development';
 import api from '../../api/axios'
 
 function EditModal({show, handleClose, handleEdit, id}) {
@@ -17,7 +18,7 @@ function EditModal({show, handleClose, handleEdit, id}) {
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" }
   ]
-  
+
   const dept = [
   { label: "Department of Information Technology", value: "Department of Information Technology" },
   { label: "Department of Management", value: "Department of Management" },
@@ -28,6 +29,11 @@ function EditModal({show, handleClose, handleEdit, id}) {
   { label: "Admin Office", value: "Admin Office" },
   ]
   
+  const usertype = [
+    { label: "User", value: 1 },
+    { label: "Human Resources", value: 2 },
+    { label: "Admin", value: 0 }
+  ]
 
   const onSubmit = (e) => {
     setLoading(true);
@@ -41,11 +47,12 @@ function EditModal({show, handleClose, handleEdit, id}) {
       userinfo_email: document.getElementById("emailaddress").value,
       userinfo_number : document.getElementById("mobilenumber").value,
       userinfo_designation: document.getElementById("designation").value,
-      userinfo_department: document.getElementById("department").value
+      userinfo_department: document.getElementById("department").value,
+      user_type: document.getElementById('user_type').value
     }
-    console.log(cvsuid);
+    console.log(data.user_type);
     const datasave = async () => {
-      await api.put(`${cvsuid}`, {data})
+      await api.put(`manage/${cvsuid}`, {data})
       .then(response => {
         console.log('response : ', response.status)
         handleEdit();
@@ -89,6 +96,18 @@ function EditModal({show, handleClose, handleEdit, id}) {
                 name="cvsuidnumber"
                 defaultValue = {id.cvsu_id}
               />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form">
+              <label htmlFor="gender">
+                <strong>User Category</strong>
+              </label>
+              <div className="dropdown">
+              <select className="form-control" id="user_type"  defaultValue = {id.user_type}> 
+                {usertype.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
+              </select>
+              </div>
             </div>
           </div>
         </div>

@@ -54,13 +54,15 @@ function Dashboard() {
     console.log(localStorage.getItem("userType"))
     
     const retrieveall = async () => {
-      var response = await api.get(cvsuID).catch((err) => {
+      var response = await api.get(`all/${cvsuID}`).catch((err) => {
         console.log('error : ', err)
-      })
+      }) 
       if (response && response.data)
+      {
         setUserData(response.data)
+      }
     }
-
+    console.log(userData);
     const retrieveuserattendance = async () => {
       var response = await api.get(`attendance/getuser/${cvsuID}`).catch((err) => {
         console.log('error : ', err)
@@ -80,7 +82,7 @@ function Dashboard() {
 
   // time in or out 
   const timeInorOut = async () => {
-    let fullname = userData[0].userinfo_fname + " " + userData[0].userinfo_lname;
+    let fullname = userData.userinfo_fname + " " + userData.userinfo_lname;
     if (!timecheck) {
       console.log("TIME IN!", timecheck)
       setLoading(true)
@@ -159,9 +161,9 @@ return (
           }}
         >
           <div className="card-body">
-            <h3>Good {timetxt || 'Day,'} {userData? userData[0].userinfo_fname + ' ' + userData[0].userinfo_lname + ' !' : 'User!'}</h3>
+            <h3>Good {timetxt || 'Day,'} {userData? userData.userinfo_fname + ' ' + userData.userinfo_lname + ' !' : 'User!'}</h3>
             <hr />
-            <h4>Tuesday | September 07, 2021</h4>
+            <h4>Tuesday | September 07, 2021 * to edit as realtime data</h4>
           </div>
         </div>
         <div className="row mb-3">
@@ -209,9 +211,9 @@ return (
           <div className="col-md-6">
             <div className="card" style={{ boxShadow: "-3px 4px 10px" }}>
               <div className="card-body" style={{ boxShadow: "0px 0px" }}>
-                <h3>Time in : {timeIn ? timeIn[0].timein : '--:--'}</h3>
+                <h3>Time in : {userData ? userData.timein : '--:--'}</h3>
                 <hr />
-                <h3>Time out : {timeIn ? timeIn[0].timeout : '--:--'}</h3>
+                <h3>Time out : {userData ? userData.timeout : '--:--'}</h3>
               </div>
             </div>
           </div>

@@ -24,9 +24,16 @@ const dept = [
   { label: "Admin Office", value: "Admin Office" },
 ]
 
+const usertype = [
+  { label: "User", value: 1 },
+  { label: "Human Resources", value: 2 },
+  { label: "Admin", value: 0 }
+]
+
 const [data, setData] = useState({
   cvsu_id: '',
   password: '',
+  user_type: '',
   userinfo_fname: '',
   userinfo_mname: '',
   userinfo_lname: '',
@@ -69,21 +76,21 @@ const validate = () => {
       if (!password && !password && !fname && !lname && !email && !designation) {
         setError({...error, 
           cvsuID:"", 
-          password: "Password is required",
-          fname: "First name is required",
-          lname: "Last name is required",
-          email: "Email is required",
-          designation: "Designation is required"
+          password: "required",
+          fname: "required",
+          lname: "required",
+          email: "required",
+          designation: "required"
         })
       } else {
         if (!fname && !lname && !email && !designation) {
           setError({...error, 
             cvsuID:"", 
             password: "",
-            fname: "First name is required",
-            lname: "Last name is required",
-            email: "Email is required",
-            designation: "Designation is required"
+            fname: "required",
+            lname: "required",
+            email: "required",
+            designation: "required"
           })
         } else {
           if (!lname && !email && !designation) {
@@ -91,9 +98,9 @@ const validate = () => {
               cvsuID:"", 
               password: "",
               fname: "",
-              lname: "Last name is required",
-              email: "Email is required",
-              designation: "Designation is required"
+              lname: "required",
+              email: "required",
+              designation: "required"
             })
           } else {
             if (!email && !designation) {
@@ -102,8 +109,8 @@ const validate = () => {
                 password: "",
                 fname: "",
                 lname: "",
-                email: "Email is required",
-                designation: "Designation is required"
+                email: "required",
+                designation: "required"
               })
             } else {
               if (!designation) {
@@ -113,7 +120,7 @@ const validate = () => {
                   fname: "",
                   lname: "",
                   email: "",
-                  designation: "Designation is required"
+                  designation: "is required"
                 })
               } else {
                   if (!validateEmail(email)){
@@ -143,14 +150,14 @@ const validate = () => {
           }
         }
       }  
-    
 }
 
 const submit = async () => {
   data.userinfo_department = document.getElementById('userinfo_department').value
   data.userinfo_gender = document.getElementById('userinfo_gender').value
+  data.user_type = document.getElementById('user_type').value
   // CONNECT TO API
-  await api.post('',data)
+  await api.post('adduser',data)
   .then(res => {
     console.log('response : ',res.data)
     //submitlogin()
@@ -186,8 +193,8 @@ const onhandlePassword = (e) => {
   console.log(data)
   if (value === ""){
     setError({...error, password: "required"})
-  } else if (value.length < 4){
-    setError({...error, password: "must be at least 4 character"})
+  } else if (value.length < 8){
+    setError({...error, password: "must be at least 8 character"})
   } else {
     setError({...error,password: ""})
   }
@@ -279,6 +286,7 @@ return (
     <div className="card-body">
         <h5>Login details</h5>
         <hr />
+        
         <div className="form-row">
           <div className="col-md-6">
             <div className="form">
@@ -309,11 +317,22 @@ return (
                 className="form-control mb-3"
                 type= 'password'
                 id="password"
-                placeholder="password"
+                placeholder="Password"
                 name="pincode"
                 value={data.password}
               />
-              
+            </div>
+          </div>
+          <div className="col">
+            <div className="form">
+              <label htmlFor="gender">
+                <strong>User Category</strong>
+              </label>
+              <div className="dropdown">
+              <select className="form-control" id="user_type"> 
+                {usertype.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
+              </select>
+              </div>
             </div>
           </div>
         </div>

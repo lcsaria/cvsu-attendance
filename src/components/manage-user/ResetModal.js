@@ -14,8 +14,8 @@ function ResetModal({show, handleClose, handleReset, res}) {
     console.log(value)
     if (value === ""){
       setError_password("")
-    } else if (value.length < 4){
-      setError_password("Password must be at least 4 character")
+    } else if (value.length < 8){
+      setError_password("Password must be at least 8 character")
     } else {
       setError_password("")
     }
