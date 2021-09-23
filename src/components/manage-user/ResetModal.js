@@ -9,7 +9,7 @@ function ResetModal({show, handleClose, handleReset, res}) {
   const [error_password, setError_password] = useState()
 
   const onChangePassword = (e) => {
-    const value = e.target.value.replace(/\D/g, "");
+    const value = e.target.value
     setPassword(value)
     console.log(value)
     if (value === ""){
@@ -70,9 +70,8 @@ function ResetModal({show, handleClose, handleReset, res}) {
               <input
                 className="form-control"
                 type="password"
-                maxLength="4"
                 id="password"
-                placeholder="0000"
+                placeholder="password"
                 name="pincode"
                 onChange={onChangePassword}
               />

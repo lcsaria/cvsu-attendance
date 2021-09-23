@@ -58,12 +58,12 @@ const validate = () => {
     
     if (!cvsuID && !password && !fname && !lname && !email && !designation){
       setError({...error, 
-        cvsuID:"CvSU ID is required", 
-        password: "Password is required",
-        fname: "First name is required",
-        lname: "Last name is required",
-        email: "Email is required",
-        designation: "Designation is required"
+        cvsuID:"required", 
+        password: "required",
+        fname: "required",
+        lname: "required",
+        email: "required",
+        designation: "required"
       })
     } else {
       if (!password && !password && !fname && !lname && !email && !designation) {
@@ -147,6 +147,8 @@ const validate = () => {
 }
 
 const submit = async () => {
+  data.userinfo_department = document.getElementById('userinfo_department').value
+  data.userinfo_gender = document.getElementById('userinfo_gender').value
   // CONNECT TO API
   await api.post('',data)
   .then(res => {
@@ -170,27 +172,34 @@ const validateEmail = (email) => {
   return r.test(email);
 }
 
+const onhandleCvsuid = (e) => {
+  const value = e.target.value.replace(/\D/g,"");
+  setData({...data, cvsu_id: value})
+  console.log(data)
+  if (!value) setError({...error, cvsuID: "required"})
+  else setError({...error, cvsuID: ""})
+}
+
 const onhandlePassword = (e) => {
-  const value = e.target.value.replace(/\D/g, "");
+  const value = e.target.value
   setData({...data, password: value})
   console.log(data)
   if (value === ""){
-    setError({...error, password: "Password is required"})
+    setError({...error, password: "required"})
   } else if (value.length < 4){
-    setError({...error, password: "Password must be at least 4 character"})
+    setError({...error, password: "must be at least 4 character"})
   } else {
     setError({...error,password: ""})
   }
   
 }
-
 const handle = (e) => {
   const newdata = { ...data }
   newdata[e.target.id] = e.target.value
   setData(newdata)
   if (e.target.id === "cvsu_id"){
     if (e.target.value === "") {
-      setError({...error, cvsuID: "CvSU ID is required"})
+      setError({...error, cvsuID: "required"})
     } else {
       setError({...error, cvsuID: ""})
     }
@@ -198,7 +207,7 @@ const handle = (e) => {
 
   if (e.target.id === "password"){
     if (e.target.value === "") {
-      setError({...error, password: "Password is required"})
+      setError({...error, password: "required"})
     } else {
       setError({...error, password: ""})
     }
@@ -206,7 +215,7 @@ const handle = (e) => {
 
   if (e.target.id === "userinfo_fname"){
     if (e.target.value === "") {
-      setError({...error, fname: "First Name is required"})
+      setError({...error, fname: "required"})
     } else {
       setError({...error, fname: ""})
     }
@@ -214,7 +223,7 @@ const handle = (e) => {
 
   if (e.target.id === "userinfo_lname"){
     if (e.target.value === "") {
-      setError({...error, lname: "Last Name is required"})
+      setError({...error, lname: "required"})
     } else {
       setError({...error, lname: ""})
     }
@@ -222,7 +231,7 @@ const handle = (e) => {
 
   if (e.target.id === "userinfo_email"){
     if (e.target.value === ""){
-      setError({...error, email: "Email is required"})
+      setError({...error, email: "required"})
     } else if (!validateEmail(e.target.value)){
       setError({...error, email: "Invalid email"})
     } else {
@@ -232,7 +241,7 @@ const handle = (e) => {
 
   if (e.target.id === "userinfo_designation"){
     if (e.target.value === "") {
-      setError({...error, designation: "Designation is required"})
+      setError({...error, designation: "required"})
     } else {
       setError({...error, designation: ""})
     }
@@ -268,60 +277,54 @@ return (
   </div>
   <div className="card shadow">
     <div className="card-body">
-        <h4>Login details</h4>
+        <h5>Login details</h5>
         <hr />
         <div className="form-row">
           <div className="col-md-6">
             <div className="form">
               <label htmlFor="cvsuidnumber">
-                <strong>CvSU ID Number*&nbsp;</strong>
+                <strong>CvSU ID Number*</strong>
+                {(!error.cvsuID) ? null : <span className="ml-3 text-danger">{error.cvsuID}</span>}
               </label>
               <input
-                onChange={(e) => handle(e)}
+                onChange={onhandleCvsuid}
                 className="form-control mb-3"
                 type="text"
                 id="cvsu_id"
                 placeholder="CvSU ID Number"
                 name="cvsuidnumber"
+                value={data.cvsu_id}
               />
             </div>
-            {
-              (!error.cvsuID) ? null 
-              :
-              <span className="ml-3 text-danger">{error.cvsuID}</span>
-            }
           </div>
           <div className="col-md-6">
             <div className="form">
               <label htmlFor="pincode">
-                <strong>4 Digit Pin Code*</strong>
+                <strong>Password*</strong>
+                {(!error.password) ? null : <span className="ml-3 text-danger">{error.password}</span> }
                 <br />
               </label>
               <input
                 onChange={onhandlePassword}
                 className="form-control mb-3"
                 type= 'password'
-                maxLength="4"
                 id="password"
-                placeholder="0000"
+                placeholder="password"
                 name="pincode"
                 value={data.password}
               />
-              {
-                (!error.password) ? null 
-                :
-                <span className="ml-3 text-danger">{error.password}</span>
-              }
+              
             </div>
           </div>
         </div>
-        <h4 className="mt-3">Personal details</h4>
+        <h5 className="mt-3">Personal details</h5>
         <hr />
         <div className="form-row">
           <div className="col-lg-6">
             <div className="form-group">
               <label htmlFor="firstname">
                 <strong>First Name*</strong>
+                {(!error.fname) ? null : <span className="ml-3 text-danger">{error.fname}</span>}  
                 <br />
               </label>
               <input
@@ -332,11 +335,7 @@ return (
                 placeholder="First Name"
                 name="firstname"
               />
-              {
-                (!error.fname) ? null 
-                :
-                <span className="ml-3 text-danger">{error.fname}</span>
-              }              
+                          
             </div>
           </div>
           <div className="col-lg-6">
@@ -358,6 +357,7 @@ return (
             <div className="form">
               <label htmlFor="lastname">
                 <strong>Last Name*</strong>
+                {(!error.lname) ? null : <span className="ml-3 text-danger">{error.lname}</span>}
               </label>
               <input
                 onChange={(e) => handle(e)}
@@ -367,11 +367,6 @@ return (
                 placeholder="Last Name"
                 name="lastname"
               />
-              {
-                (!error.lname) ? null 
-                :
-                <span className="ml-3 text-danger">{error.lname}</span>
-              }
             </div>
           </div>
           <div className="col-lg-6">
@@ -394,6 +389,7 @@ return (
             <div className="form">
               <label htmlFor="emailaddress">
                 <strong>Email Address*</strong>
+                {(!error.email) ? null : <span className="ml-3 text-danger">{error.email}</span>}
               </label>
               <input
                 onChange={(e) => handle(e)}
@@ -403,11 +399,6 @@ return (
                 placeholder="user@cvsu.edu.ph"
                 name="emailaddress"
               />
-              {
-                (!error.email) ? null 
-                :
-                <span className="ml-3 text-danger">{error.email}</span>
-              }
             </div>
           </div>
           <div className="col-lg-6">
@@ -440,13 +431,13 @@ return (
                 placeholder="09123456789"
                 name="contactnumber"
               />
-
             </div>
           </div>
           <div className="col">
             <div className="form">
               <label htmlFor="designation">
                 <strong>Designation*</strong>
+                {(!error.designation) ? null : <span className="ml-3 text-danger">{error.designation}</span>}
               </label>
               <input
                 onChange={(e) => handle(e)}
@@ -456,11 +447,6 @@ return (
                 placeholder="Designation"
                 name="designation"
               />
-              {
-                (!error.designation) ? null 
-                :
-                <span className="ml-3 text-danger">{error.designation}</span>
-              }
             </div>
           </div>
         </div>
