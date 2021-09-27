@@ -339,7 +339,7 @@ return (
         <h5 className="mt-3">Personal details</h5>
         <hr />
         <div className="form-row">
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <div className="form-group">
               <label htmlFor="firstname">
                 <strong>First Name*</strong>
@@ -357,7 +357,7 @@ return (
                           
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="middlename">
                 <strong>Middle Name</strong>
@@ -372,7 +372,7 @@ return (
               />
             </div>
           </div>
-          <div className="col-lg-6 col-xl-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="lastname">
                 <strong>Last Name*</strong>
@@ -388,7 +388,7 @@ return (
               />
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="gender">
                 <strong>Gender</strong>
@@ -404,7 +404,7 @@ return (
               </div>
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="emailaddress">
                 <strong>Email Address*</strong>
@@ -420,7 +420,7 @@ return (
               />
             </div>
           </div>
-          <div className="col-lg-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="department">
                 <strong>Department</strong>
@@ -437,7 +437,7 @@ return (
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-xl-6">
+          <div className="col-md-6">
             <div className="form">
               <label htmlFor="contactnumber">
                 <strong>Contact Number</strong>
