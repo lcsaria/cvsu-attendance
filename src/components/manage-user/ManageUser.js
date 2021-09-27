@@ -181,6 +181,9 @@ function ManageUser() {
                   placeholder="Search..."
                   onChange={search}
                 />
+                <span className="search-icon">
+                  <i class="fas fa-search"></i>
+                </span>
               </label>
             </div>
           </div>

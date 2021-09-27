@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.4",
+    "dateformat": "^5.0.1",
     "eslint-plugin-react-hooks": "^4.2.1-alpha-cb8a50619-20210909",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.3",
