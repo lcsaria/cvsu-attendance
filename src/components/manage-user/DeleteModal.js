@@ -20,7 +20,7 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
           <Modal 
               show={show} 
               onHide={handleClose}
-              size="lg"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered>
             <Modal.Header closeButton>

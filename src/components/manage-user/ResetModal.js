@@ -23,6 +23,9 @@ function ResetModal({show, handleClose, handleReset, res}) {
  }
   
   const onReset = async () => {
+    console.log(password.length);
+    if (!password) return setError_password("Password must be at least 8 character")
+    if (password.length < 8 ) return setError_password("Password must be at least 8 character")
     setLoading(true);
       let data = {
         cvsu_id: res.cvsu_id,
@@ -47,11 +50,12 @@ function ResetModal({show, handleClose, handleReset, res}) {
   }
   
     return (
+      <form>
         <div>
           <Modal 
               show={show} 
               onHide={handleClose}
-              size="lg"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered>
             <Modal.Header closeButton>
@@ -61,7 +65,7 @@ function ResetModal({show, handleClose, handleReset, res}) {
             </Modal.Header>
             <Modal.Body>
             <div className="form-row">
-          <div className="col-lg-6">
+          <div className="col">
             <div className="form-group">
               <label htmlFor="firstname">
                 <strong>New Password*</strong>
@@ -71,9 +75,10 @@ function ResetModal({show, handleClose, handleReset, res}) {
                 className="form-control"
                 type="password"
                 id="password"
-                placeholder="password"
+                placeholder="Password"
                 name="pincode"
                 onChange={onChangePassword}
+                required
               />
               {
               (!error_password) ? null :
@@ -102,6 +107,7 @@ function ResetModal({show, handleClose, handleReset, res}) {
             </Modal.Footer>
         </Modal>
         </div>
+        </form>
     )
 }
 
