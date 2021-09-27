@@ -84,9 +84,11 @@ function Home() {
         console.log(JSON.stringify(response.data))
         alert('welcome!')
         localStorage.setItem('cvsuID',cvsuID)
+        localStorage.setItem('password',password)
         localStorage.setItem('userType',response.data)
         localStorage.setItem('isAuthenticated', true);
         console.log(localStorage.getItem('cvsuID'))
+        console.log(localStorage.getItem('password'))
         console.log(localStorage.getItem('userType'))
         console.log(localStorage.getItem('isAuthenticated'))
         window.location.href='/dashboard';
