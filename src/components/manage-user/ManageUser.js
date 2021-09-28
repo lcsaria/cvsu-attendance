@@ -43,7 +43,7 @@ function ManageUser() {
           <td>{user.userinfo_email}</td>
           <td>{user.userinfo_department}</td>
           <td>{user.userinfo_designation}</td>
-          <td > 
+          <td className="d-flex align-items-center"> 
             <button
               className="btn btn-light btn-sm"
               type="button"
