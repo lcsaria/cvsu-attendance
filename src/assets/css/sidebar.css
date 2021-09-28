@@ -84,6 +84,10 @@
   background-color: #75a478;
 }
 
+.nav-link:focus{
+  background-color: #75a478;
+}
+
 .sidebar-logo img {
   display: block;
 }

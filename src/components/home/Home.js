@@ -40,8 +40,8 @@ function Home() {
       
    }
 
+   // LOGIN ATTEMPT (UP TO 5 ATTEMPTS)
    const loginFailed = () => {
-      
       if(attempt < 5) {
         setAttempt(attempt+1)
         console.log(attempt)
@@ -67,26 +67,32 @@ function Home() {
       if (lock){
         alert("Your account is locked.")
       } else {
+        // IF BOTH IS EMPTY
         if (!cvsuID && !password){
           setError_cvsuID("CvSU ID is required")
           setError_password("Password is required")
           setLoading(false);
           loginFailed()
+          // ELSE IF LENGTH OF CVSU ID IS LESS THAN FOUR
         } else if (cvsuID.length < 4){
           setError_cvsuID("CvSU ID must be at least 4 characters")
           setLoading(false);
           loginFailed()
         } else {
+          // REMOVE ERROR FOR CVSU ID
           setError_cvsuID("")
+          // IF PASSWORD IS EMPTY
           if (!password){
             setError_password("Password is required")
             setLoading(false);
             loginFailed()
+             // ELSE IF LENGTH OF PASSWORD IS LESS THAN FOUR
           } else if (password.length < 4){
             setError_password("Password must be at least 4 character")
             setLoading(false);
             loginFailed()
           } else {
+             // LOGIN ATTEMPT
             setError_cvsuID("")
             setError_password("")
             login(e);
@@ -112,6 +118,7 @@ function Home() {
         password: password
       })
       .then(response => {
+         // IF TRUE
         setLoading(false);
         console.log(JSON.stringify(response.data))
         alert('welcome!')
@@ -126,10 +133,10 @@ function Home() {
       .catch((err) => 
       {
         console.log(err)
-        
+        // IF THE ACCOUNT IS LOCKED
         if(lock){
           alert("Your account is locked.")
-        } else {
+        } else { 
           alert("Incorrect CvSU ID / Pin")
           loginFailed()
         }
