@@ -11,7 +11,9 @@ function Home() {
     const [loading, setLoading] = useState(false);
     const [error_cvsuID, setError_cvsuID] = useState()
     const [error_password, setError_password] = useState()
-    
+    const [lock, setLock] = useState(false)
+    const [attempt, setAttempt] = useState(1)
+
     const onChange = (e) => {
       const value = e.target.value.replace(/\D/g, "");
       setcvsuID(value)
@@ -38,34 +40,64 @@ function Home() {
       
    }
 
+   const loginFailed = () => {
+      
+      if(attempt < 5) {
+        setAttempt(attempt+1)
+        console.log(attempt)
+        alert(`Login failed. Attempt: ${attempt}`)
+      } else {
+        if (lock){
+          alert("Your account is locked.")
+        } else {
+          setLock(true)
+          console.log(lock)
+          alert("Your account is locked.")
+        }
+      }
+   }
+
     const onSubmit = (data) => {
       checkCredentials(data);
     }
     
     const checkCredentials = (e) => {
       e.preventDefault()
-      if (!cvsuID){
-        setError_cvsuID("CvSU ID is required")
-        setLoading(false);
-      } else if (cvsuID.length < 4){
-        setError_cvsuID("CvSU ID must be at least 4 characters")
-        setLoading(false);
+
+      if (lock){
+        alert("Your account is locked.")
       } else {
-        setError_cvsuID("")
+        if (!cvsuID && !password){
+          setError_cvsuID("CvSU ID is required")
+          setError_password("Password is required")
+          setLoading(false);
+          loginFailed()
+        } else if (cvsuID.length < 4){
+          setError_cvsuID("CvSU ID must be at least 4 characters")
+          setLoading(false);
+          loginFailed()
+        } else {
+          setError_cvsuID("")
+          if (!password){
+            setError_password("Password is required")
+            setLoading(false);
+            loginFailed()
+          } else if (password.length < 4){
+            setError_password("Password must be at least 4 character")
+            setLoading(false);
+            loginFailed()
+          } else {
+            setError_cvsuID("")
+            setError_password("")
+            login(e);
+            console.log(error_cvsuID, error_password)
+          }
+        }
       }
 
-      if (!password){
-        setError_password("Password is required")
-        setLoading(false);
-      } else if (password.length < 4){
-        setError_password("Password must be at least 4 character")
-        setLoading(false);
-      } else {
-        setError_cvsuID("")
-        setError_password("")
-        login(e);
-        console.log(error_cvsuID, error_password)
-      }
+      
+
+      
       
     }
 
@@ -94,7 +126,13 @@ function Home() {
       .catch((err) => 
       {
         console.log(err)
-        alert("Incorrect CvSU ID / Pin")
+        
+        if(lock){
+          alert("Your account is locked.")
+        } else {
+          alert("Incorrect CvSU ID / Pin")
+          loginFailed()
+        }
         setLoading(false);
         return
       })
