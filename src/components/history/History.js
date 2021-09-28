@@ -69,7 +69,7 @@ function History() {
         <div className="card-body" style={{ height: 46, background: "#a5d6a7" }}>
           <h4
             className="card-title"
-            style={{ marginTop: "-10px", color: "rgb(15,15,16)" }}
+            style={{ position: "sticky", marginTop: "-10px", color: "rgb(15,15,16)" }}
           >
             Attendance History
           </h4>
@@ -90,7 +90,7 @@ function History() {
                 className="text-md-right dataTables_filter"
                 id="dataTable_filter"
               >
-                <label>
+                <label className="float-right">
                 <ReactDatePicker
                     selected={startDate}
                     onChange={(date) => handleDate(date)}

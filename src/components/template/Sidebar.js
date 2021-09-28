@@ -30,7 +30,7 @@ function Sidebar() {
       className={isExpanded ? "Sidebar sidebar-text" : "Sidebar sidebar-text collapsed"}>
       <div className="sidebar-header">
         <i className="fas fa-bars sidebar-icon mt-2 ml-1" onClick={handleToggler}/>
-        <img className="sidebar-logo" src={logo} alt="logo" width="25%"/>
+        <img className="sidebar-logo ml-4" src={logo} alt="logo" width="25%"/>
         <br className="line"/>
       </div>
       <a className="nav-link" href="/dashboard">  
