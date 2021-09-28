@@ -6,44 +6,43 @@ import api from '../../api/axios'
 function DeleteModal({show, handleClose, handleDelete, del}) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    password: ""
+    username : localStorage.getItem('cvsuID'),
+    password : ''
   })
   const password = useState("");
   const [error, setError] = useState({
     password: ""
   });
 
-  const password2 = localStorage.getItem("password");
-
   const onhandlePassword = (e) => {
-    const newdata = { ... data}
-    newdata[e.target.id] = e.target.value
-    setData(newdata)
+    const value = e.target.value
+    setData({...data, password: value})
     if (e.target.value === "") {
       setError({...error, password: "required"})
     } else {
       setError({...error, password: ""})
     }
-    console.log(localStorage.getItem("password"))
   }
 
   const validate = () => {
-    if(!password){
-      setError({...error, password: "required"})
-    } else {
-      if (data.password !== password2){
-        setError({...error, password: "password don't match"})
-      } else {
-        onDelete()
-      }
-    }
+    if(!data.password) setError({...error, password: "required"})
+    else onDelete()
+    
   }
   const onDelete = async () => {
+    setLoading(true);
+      await api.post(`login`,{data})
+      .then(response => {
+        console.log(response)
+      });
+      console.log(data)
+      /*
       setLoading(true);
       await api.delete(`${del.cvsu_id}`)
       handleDelete();
       setLoading(false);
       window.location.reload(false)
+      */
     }
   
   
