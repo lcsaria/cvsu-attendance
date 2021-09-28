@@ -6,7 +6,7 @@ import api from '../../api/axios'
 function DeleteModal({show, handleClose, handleDelete, del}) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    username : localStorage.getItem('cvsuID'),
+    cvsu_id : localStorage.getItem('cvsuID'),
     password : ''
   })
   const password = useState("");
@@ -31,11 +31,21 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
   }
   const onDelete = async () => {
     setLoading(true);
-      await api.post(`login`,{data})
-      .then(response => {
-        console.log(response)
-      });
-      console.log(data)
+      await api.post(`login`,{
+        cvsu_id: data.cvsu_id,
+        password: data.password
+      })
+      .then(response =>{
+        api.delete(`${del.cvsu_id}`)
+        handleDelete();
+        setLoading(false);
+        alert('User deleted successfully.')
+        window.location.reload(false)
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
       /*
       setLoading(true);
       await api.delete(`${del.cvsu_id}`)
