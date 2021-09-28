@@ -6,26 +6,24 @@ import SidebarHR from '../template/SidebarHR';
 import SidebarUser from '../template/SidebarUser';
 import api from '../../api/axios'
 import ReactDatePicker from 'react-datepicker';
+import dateFormat from "dateformat";
 
 function History() {
     const [data, setData] = useState([])
     const cvsuID = localStorage.getItem('cvsuID') || ''
-    const [searchTerm, setSearchTerm] = useState("")
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState("");
     
-    const search = (e) => {
-      setSearchTerm(e.target.value)
-    }
+    const convertDate = dateFormat(startDate, "yyyy-mm-dd")
 
-    const handleDate = (e) => {
-      setStartDate(e.target.value);
+    const handleDate = (date) => {
+      setStartDate(date);
     };
     
     const renderTable = () => {
       return data.filter((user) => {
-        if (searchTerm === "") {
+        if (!startDate) {
           return user
-        } else if (user.date.includes(startDate)) {
+        } else if (user.date.includes(convertDate)) {
           return user
         }
       }).map(user => {
@@ -71,7 +69,7 @@ function History() {
         <div className="card-body" style={{ height: 46, background: "#a5d6a7" }}>
           <h4
             className="card-title"
-            style={{ marginTop: "-10px", color: "rgb(15,15,16)" }}
+            style={{ position: "sticky", marginTop: "-10px", color: "rgb(15,15,16)" }}
           >
             Attendance History
           </h4>
@@ -92,11 +90,17 @@ function History() {
                 className="text-md-right dataTables_filter"
                 id="dataTable_filter"
               >
-                <label>
+                <label className="float-right">
                 <ReactDatePicker
                     selected={startDate}
-                    onChange={() => handleDate(startDate)}
+                    onChange={(date) => handleDate(date)}
+                    dateFormat="yyyy-MM-dd"
+                    className="form-control form-control-sm text-black icon-input-left"
+                    isClearable
                   />
+                <span className="date-picker-icon">
+                  <i class="fas fa-calendar"/>
+                </span>
                 </label>
               </div>
             </div>

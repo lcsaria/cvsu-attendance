@@ -5,22 +5,52 @@ import Sidebar from '../template/Sidebar'
 import api from '../../api/axios'
 import SidebarUser from '../template/SidebarUser'
 import SidebarHR from '../template/SidebarHR'
+import ReactDatePicker from 'react-datepicker'
+import dateFormat from "dateformat";
 
+const gen = [
+    { label: "Name", value: "Name" },
+    { label: "Date", value: "Date" }
+]
 function Reports() {
     const [data, setData] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
+    const [isDate, setIsDate] = useState(false);
+    const [startDate, setStartDate] = useState("");
+    
+    const convertDate = dateFormat(startDate, "yyyy-mm-dd")
+
+    const handleDate = (date) => {
+      setStartDate(date);
+    };
 
     const search = (e) => {
       setSearchTerm(e.target.value)
     }
 
+    const handle = (e) => {
+      if (e.target.value === "Name") {
+        setIsDate(false)
+      } else {
+        setIsDate(true)
+      }
+      console.log(e.target.value)
+    }
     const renderTable = () => {
       // eslint-disable-next-line array-callback-return
       return data.filter((user) => {
-        if (searchTerm === "") {
-          return user
-        } else if (user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-          return user
+        if (!isDate){
+          if (searchTerm === "") {
+            return user;
+          } else if (user.name.toLowerCase().includes(searchTerm)){
+            return user;
+          }
+        } else {
+          if (startDate === ""){
+            return user;
+          } else if (user.date.includes(convertDate)){
+            return user;
+          }
         }
       }).map(user => {
         return (
@@ -84,15 +114,37 @@ function Reports() {
                     <div
                       className="text-md-right dataTables_filter"
                       id="dataTable_filter"
-                    >
+                    ><label>
+                      <div className="dropdown">
+                        <select className="form-control form-control-sm" id="isDate" onChange={(e) => handle(e)}> 
+                          {gen.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
+                        </select>
+                        </div>
+                        </label>
                       <label>
-                        <input
-                          type="search"
-                          className="form-control form-control-sm"
-                          aria-controls="dataTable"
-                          placeholder="Search"
-                          onChange={search}
-                        />
+                       {
+                         (isDate) ? 
+                          <>
+                          <ReactDatePicker
+                              selected={startDate}
+                              onChange={(date) => handleDate(date)}
+                              dateFormat="yyyy-MM-dd"
+                              className="form-control form-control-sm text-black icon-input-left"
+                              isClearable
+                            />
+                          <span className="date-picker-icon">
+                            <i class="fas fa-calendar"/>
+                          </span>
+                        </>
+                         :
+                         <input
+                         type="search"
+                         className="form-control form-control-sm"
+                         aria-controls="dataTable"
+                         placeholder="Search"
+                         onChange={search}
+                       />
+                       }
                       </label>
                     </div>
                   </div>

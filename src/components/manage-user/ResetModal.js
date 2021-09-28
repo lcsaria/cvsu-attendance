@@ -9,13 +9,13 @@ function ResetModal({show, handleClose, handleReset, res}) {
   const [error_password, setError_password] = useState()
 
   const onChangePassword = (e) => {
-    const value = e.target.value.replace(/\D/g, "");
+    const value = e.target.value
     setPassword(value)
     console.log(value)
     if (value === ""){
       setError_password("")
-    } else if (value.length < 4){
-      setError_password("Password must be at least 4 character")
+    } else if (value.length < 8){
+      setError_password("Password must be at least 8 character")
     } else {
       setError_password("")
     }
@@ -23,6 +23,9 @@ function ResetModal({show, handleClose, handleReset, res}) {
  }
   
   const onReset = async () => {
+    console.log(password.length);
+    if (!password) return setError_password("Password must be at least 8 character")
+    if (password.length < 8 ) return setError_password("Password must be at least 8 character")
     setLoading(true);
       let data = {
         cvsu_id: res.cvsu_id,
@@ -47,11 +50,12 @@ function ResetModal({show, handleClose, handleReset, res}) {
   }
   
     return (
+      <form>
         <div>
           <Modal 
               show={show} 
               onHide={handleClose}
-              size="lg"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered>
             <Modal.Header closeButton>
@@ -61,7 +65,7 @@ function ResetModal({show, handleClose, handleReset, res}) {
             </Modal.Header>
             <Modal.Body>
             <div className="form-row">
-          <div className="col-lg-6">
+          <div className="col">
             <div className="form-group">
               <label htmlFor="firstname">
                 <strong>New Password*</strong>
@@ -70,11 +74,11 @@ function ResetModal({show, handleClose, handleReset, res}) {
               <input
                 className="form-control"
                 type="password"
-                maxLength="4"
                 id="password"
-                placeholder="0000"
+                placeholder="Password"
                 name="pincode"
                 onChange={onChangePassword}
+                required
               />
               {
               (!error_password) ? null :
@@ -103,6 +107,7 @@ function ResetModal({show, handleClose, handleReset, res}) {
             </Modal.Footer>
         </Modal>
         </div>
+        </form>
     )
 }
 

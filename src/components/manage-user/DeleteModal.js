@@ -5,13 +5,46 @@ import api from '../../api/axios'
 
 function DeleteModal({show, handleClose, handleDelete, del}) {
   const [loading, setLoading] = useState(false);
-  
+  const [data, setData] = useState({
+    cvsu_id : localStorage.getItem('cvsuID'),
+    password : ''
+  })
+  const password = useState("");
+  const [error, setError] = useState({
+    password: ""
+  });
+
+  const onhandlePassword = (e) => {
+    const value = e.target.value
+    setData({...data, password: value})
+    if (e.target.value === "") {
+      setError({...error, password: "required"})
+    } else {
+      setError({...error, password: ""})
+    }
+  }
+
+  const validate = () => {
+    if(!data.password) setError({...error, password: "required"})
+    else onDelete()
+    
+  }
   const onDelete = async () => {
-      setLoading(true);
-      await api.delete(`${del.cvsu_id}`)
-      handleDelete();
-      setLoading(false);
-      window.location.reload(false)
+    setLoading(true);
+      await api.post(`login`,{
+        cvsu_id: data.cvsu_id,
+        password: data.password
+      })
+      .then(response =>{
+        api.delete(`${del.cvsu_id}`)
+        handleDelete();
+        setLoading(false);
+        window.location.reload(false)
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
     }
   
   
@@ -20,7 +53,7 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
           <Modal 
               show={show} 
               onHide={handleClose}
-              size="lg"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered>
             <Modal.Header closeButton>
@@ -29,18 +62,27 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              Are you sure? 
+              <p>Enter the password to proceed. {(!error.password) ? null : <span className="ml-3 text-danger">{error.password}</span>} </p>
+              <input
+                onChange={onhandlePassword}
+                className="form-control mb-4"
+                type= 'password'
+                id="password"
+                placeholder="Password"
+                name="pincode"
+                value={data.password}
+              />
             </Modal.Body>
             <Modal.Footer>
             {
                 loading ? 
-                <Button variant="danger" onClick={onDelete}>
+                <Button variant="danger" onClick={validate}>
                   <span>
                     <Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
                   </span>Delete
                 </Button>
                 :
-                <Button variant="danger" onClick={onDelete}>
+                <Button variant="danger" onClick={validate}>
                   Delete
                 </Button>
             }

@@ -43,7 +43,7 @@ function ManageUser() {
           <td>{user.userinfo_email}</td>
           <td>{user.userinfo_department}</td>
           <td>{user.userinfo_designation}</td>
-          <td > 
+          <td className="d-flex align-items-center"> 
             <button
               className="btn btn-light btn-sm"
               type="button"
@@ -118,14 +118,13 @@ function ManageUser() {
 
   useEffect(() => {
     const retrieve = async () => {
-      await api.get('')
+      await api.get('manage')
       .then(response => {
         console.log('response : ', response.data)
         setData(response.data)
         if (data) {
           setLoading(true);
-        }
-        
+        }  
       })
       .catch((err) => {
         console.log('error : ',err)
@@ -182,6 +181,9 @@ function ManageUser() {
                   placeholder="Search..."
                   onChange={search}
                 />
+                <span className="search-icon">
+                  <i class="fas fa-search"></i>
+                </span>
               </label>
             </div>
           </div>

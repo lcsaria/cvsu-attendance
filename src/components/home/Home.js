@@ -13,7 +13,7 @@ function Home() {
     const [error_password, setError_password] = useState()
     
     const onChange = (e) => {
-      const value = e.target.value;
+      const value = e.target.value.replace(/\D/g, "");
       setcvsuID(value)
       if (value === ""){
         setError_cvsuID("")
@@ -25,7 +25,7 @@ function Home() {
     }
 
     const onChangePassword = (e) => {
-      const value = e.target.value.replace(/\D/g, "");
+      const value = e.target.value
       setPassword(value)
       console.log(value)
       if (value === ""){
@@ -129,7 +129,7 @@ function Home() {
                             type="text"
                             id="exampleInputEmail"
                             aria-describedby="emailHelp"
-                            placeholder="Enter CvSU ID"
+                            placeholder="CvSU ID Number"
                             name="cvsuid"
                             onChange={onChange}
                             autoFocus
@@ -147,11 +147,8 @@ function Home() {
                             className="form-control form-control-user mb-2"
                             type="password"
                             id="exampleInputPassword"
-                            placeholder="4 Digit Pin"
+                            placeholder="Password"
                             name="password"
-                            inputMode="numeric"
-                            maxLength="4"
-                            pattern="[0-9]*"
                             autocomplete="off"
                             autofill={false}
                             onChange={onChangePassword}
