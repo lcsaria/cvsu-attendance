@@ -39,20 +39,12 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
         api.delete(`${del.cvsu_id}`)
         handleDelete();
         setLoading(false);
-        alert('User deleted successfully.')
         window.location.reload(false)
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
       })
-      /*
-      setLoading(true);
-      await api.delete(`${del.cvsu_id}`)
-      handleDelete();
-      setLoading(false);
-      window.location.reload(false)
-      */
     }
   
   
@@ -61,7 +53,7 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
           <Modal 
               show={show} 
               onHide={handleClose}
-              size="lg"
+              size="md"
               aria-labelledby="contained-modal-title-vcenter"
               centered>
             <Modal.Header closeButton>

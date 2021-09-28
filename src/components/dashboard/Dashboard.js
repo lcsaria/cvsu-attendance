@@ -13,8 +13,8 @@ function Dashboard() {
   const cvsuID = localStorage.getItem('cvsuID') || ''
   const [userData, setUserData] = useState("")
   const [timetxt, setTimetxt] = useState("")
+  const [datetoday, setDatetoday] = useState("")
   const [timeintxt, setTimeintxt] = useState('TIME IN')
-  const [timeIn, setTimeIn] = useState("")
   const [attendance, setAttendance] = useState([])
   const [loading, setLoading] = useState(false)
   
@@ -24,6 +24,7 @@ function Dashboard() {
     if (time >= 0 && time <= 11) setTimetxt("Morning, ")
     else if (time >= 12 && time <= 18) setTimetxt("Afternoon, ")
     else if (time >= 19 && time <= 23) setTimetxt("Evening, ")
+    setDatetoday(today.toDateString())
   }
 
   // get date today.
@@ -37,7 +38,6 @@ function Dashboard() {
       console.log('error : ', err)
     })
     if( response && response.data) {
-      setTimeIn(response.data)
       if (!response.data[0].timeout){
         setTimeintxt("TIME OUT")
         timecheck = true
@@ -163,7 +163,7 @@ return (
           <div className="card-body">
             <h3>Good {timetxt || 'Day,'} {userData? userData.userinfo_fname + ' ' + userData.userinfo_lname + ' !' : 'User!'}</h3>
             <hr />
-            <h4>Tuesday | September 07, 2021 * to edit as realtime data</h4>
+            <h4>{datetoday || 'Now'}</h4>
           </div>
         </div>
         <div className="row mb-3">
