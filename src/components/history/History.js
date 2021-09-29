@@ -95,8 +95,9 @@ function History() {
                     selected={startDate}
                     onChange={(date) => handleDate(date)}
                     dateFormat="yyyy-MM-dd"
-                    className="form-control form-control-sm text-black icon-input-left"
-                    isClearable
+                    className="form-control form-control-sm text-black bg-black icon-input-left change-icon"
+                    closeOnScroll={true}
+                    
                   />
                 <span className="date-picker-icon">
                   <i class="fas fa-calendar"/>
