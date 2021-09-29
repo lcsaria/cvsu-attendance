@@ -84,7 +84,7 @@ function ManageUser() {
             >
               <>
                 {/*user.lock = 0 or 1 */}
-                {(user.user_status == 1) ? 
+                {(user.user_status === 1) ? 
                 <i className="fa fa-lock" title="Unlock Account" />
                 :
                 <i className="fa fa-unlock" title="Lock Account" />
@@ -147,8 +147,10 @@ function ManageUser() {
     alert("Success!!");
     if (!lock) {
       localStorage.setItem("lock",true)
+      setLock(localStorage.setItem("lock",true))
     } else {
       localStorage.setItem("lock",false)
+      setLock(localStorage.setItem("lock",false))
     }
     setShowLck(false)
   }
@@ -168,6 +170,7 @@ function ManageUser() {
       })
     }
     retrieve()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
