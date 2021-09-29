@@ -112,9 +112,10 @@ function Reports() {
                   </div>
                   <div className="col-md-6">
                     <div
-                      className="text-md-right dataTables_filter"
+                      className="text-md-right dataTables_filter justify-content-start"
                       id="dataTable_filter"
-                    ><label>
+                    >
+                      <label>
                       <div className="dropdown">
                         <select className="form-control form-control-sm" id="isDate" onChange={(e) => handle(e)}> 
                           {gen.map((gender) => <option key={gender.value} value={gender.value}>{gender.label}</option>)}
@@ -130,7 +131,7 @@ function Reports() {
                               onChange={(date) => handleDate(date)}
                               dateFormat="yyyy-MM-dd"
                               className="form-control form-control-sm text-black icon-input-left"
-                              isClearable
+                              closeOnScroll={true}
                             />
                           <span className="date-picker-icon">
                             <i class="fas fa-calendar"/>
