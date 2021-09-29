@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Button, Spinner } from 'react-bootstrap';
 import api from '../../api/axios'
 
-function LockModal({show, handleClose, handleLock, lck}) {
+function LockModal({show, handleLock, handleClose, lck}) {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [error_password, setError_password] = useState()
@@ -46,9 +46,6 @@ const onLock = async () => {
     .catch((err) => {
       setLoading(false);
       console.log(err);
-      handleLock();
-      setLoading(false);
-      window.location.reload(false)
     })
   }
   

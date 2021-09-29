@@ -25,7 +25,7 @@ function ManageUser() {
   const [showEdt, setShowEdt] = useState(false);
   const [showRst, setShowRst] = useState(false);
   const [showLck, setShowLck] = useState(false);
-  const [lock,setLock] = useState(true);
+  const [lock,setLock] = useState(localStorage.getItem("lock") || false);
 
   const search = (e) => {
     setSearchTerm(e.target.value);
@@ -83,7 +83,8 @@ function ManageUser() {
               onClick={() => showLock(user)}
             >
               <>
-                {(lock) ? 
+                {/*user.lock = 0 or 1 */}
+                {(!lock) ? 
                 <i className="fa fa-lock" title="Unlock Account" />
                 :
                 <i className="fa fa-unlock" title="Lock Account" />
@@ -144,6 +145,11 @@ function ManageUser() {
   const handleLock = () => {
     //LOGIC
     alert("Success!!");
+    if (!lock) {
+      localStorage.setItem("lock",true)
+    } else {
+      localStorage.setItem("lock",false)
+    }
     setShowLck(false)
   }
 
@@ -259,7 +265,7 @@ function ManageUser() {
     <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose} id={update}/>   
     <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose} del={del}/>   
     <ResetModal show={showRst} handleReset={handleReset} handleClose={handleClose} res={rst}/>       
-    <LockModal show={showLck} handleReset={handleLock} handleClose={handleClose} lck={lck}/>     
+    <LockModal show={showLck} handleLock={handleLock} handleClose={handleClose} lck={lck}/>     
   </div>
       )
   }
