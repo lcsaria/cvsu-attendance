@@ -84,7 +84,7 @@ function ManageUser() {
             >
               <>
                 {/*user.lock = 0 or 1 */}
-                {(!lock) ? 
+                {(user.user_status == 1) ? 
                 <i className="fa fa-lock" title="Unlock Account" />
                 :
                 <i className="fa fa-unlock" title="Lock Account" />

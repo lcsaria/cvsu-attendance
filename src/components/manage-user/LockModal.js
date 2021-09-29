@@ -13,38 +13,47 @@ function LockModal({show, handleLock, handleClose, lck}) {
     console.log(value)
     if (value === ""){
       setError_password("")
-    } else if (value.length < 4){
-      setError_password("Password must be at least 4 character")
     } else {
       setError_password("")
     }
     
  }
-  
- const validate = () => {
-  if (password === ""){
-    setError_password("")
-  } else if (password.length < 4){
-    setError_password("Password must be at least 8 character")
-  } else {
-    onLock()
-  }
-}
 const onLock = async () => {
+  console.log(lck.user_status);
   setLoading(true);
   console.log(lck.cvsu_id + "->" + password)
     await api.post(`login`,{
-      cvsu_id: lck.cvsu_id,
+      cvsu_id: localStorage.getItem('cvsuID'),
       password: password
     })
     .then(response =>{
-      console.log(response)
-      handleLock();
-      setLoading(false);
-      window.location.reload(false)
+      // lock or unlock user 
+      if (lck.user_status == 0) {
+        api.post(`userlock/${lck.cvsu_id}`)
+        .then(response =>{
+          handleLock();
+          setLoading(false);
+          window.location.reload(false)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      }
+      else {
+        api.post(`userunlock/${lck.cvsu_id}`)
+        .then(response =>{
+          handleLock();
+          setLoading(false);
+          window.location.reload(false)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      }
     })
     .catch((err) => {
       setLoading(false);
+      setError_password("Incorrect Password")
       console.log(err);
     })
   }
@@ -60,7 +69,7 @@ const onLock = async () => {
               centered>
             <Modal.Header closeButton>
               <Modal.Title>
-                Lock/Unlock Password
+                {lck.user_status == 0 ? "Lock" : "Unlock"} {lck.userinfo_fname + " " + lck.userinfo_lname}?
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -68,7 +77,7 @@ const onLock = async () => {
           <div className="col">
             <div className="form-group">
               <label htmlFor="firstname">
-                <strong>New Password*</strong>
+                <strong>Enter your password</strong>
                 <br />
               </label>
               <input
@@ -91,13 +100,13 @@ const onLock = async () => {
             <Modal.Footer>
             {
                 loading ? 
-                <Button variant="danger" onClick={validate}>
+                <Button variant="danger" onClick={onLock}>
                   <span>
                     <Spinner animation="border" className="spinner-border spinner-border-sm mr-2" />
                   </span>Reset
                 </Button>
                 :
-                <Button variant="danger" onClick={validate}>
+                <Button variant="danger" onClick={onLock}>
                   Reset
                 </Button>
             }
