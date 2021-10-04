@@ -3,7 +3,6 @@ import * as ReactBootstrap from 'react-bootstrap';
 import Footer from '../template/Footer'
 import Navbar from '../template/Navbar'
 import Sidebar from '../template/Sidebar'
-import dog from '../../assets/img/dogs/image3.jpeg'
 import api from '../../api/axios'
 import SidebarUser from '../template/SidebarUser';
 import SidebarHR from '../template/SidebarHR';
@@ -27,11 +26,6 @@ function Profile() {
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" }
   ]
-
-  // change photo
-  const changePhoto = () => {
-    alert("This function is not available right now.")
-  }
 
   // change stats
   const changestats = () => {

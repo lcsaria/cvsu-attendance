@@ -1,25 +1,26 @@
 import React, { useState }from 'react'
 import * as ReactBootstrap from 'react-bootstrap'
-
 import api from '../../api/axios'
-
+var cvsuidholder = '';
 
 
 function Home() {
+
     const [cvsuID, setcvsuID] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error_cvsuID, setError_cvsuID] = useState()
     const [error_password, setError_password] = useState()
-    
+    const [lock, setLock] = useState(false)
+    const [attempt, setAttempt] = useState(1)
+
     const onChange = (e) => {
       const value = e.target.value.replace(/\D/g, "");
       setcvsuID(value)
       if (value === ""){
         setError_cvsuID("")
-      } else if (value.length < 4){
-        setError_cvsuID("CvSU ID must be at least 4 characters")
-      } else {
+      } 
+      else {
         setError_cvsuID("")
       }
     }
@@ -27,13 +28,28 @@ function Home() {
     const onChangePassword = (e) => {
       const value = e.target.value
       setPassword(value)
-      console.log(value)
-      if (value === ""){
-        setError_password("")
-      } else if (value.length < 4){
-        setError_password("Password must be at least 4 character")
-      } else {
-        setError_password("")
+      if (!value) setError_password("")
+   }
+
+   // LOGIN ATTEMPT (UP TO 5 ATTEMPTS)
+   const loginFailed = () => {
+      if (cvsuidholder === '') {
+        setAttempt(attempt+1)
+        cvsuidholder = cvsuID
+        setLock(false)
+      }
+      else if (cvsuidholder === cvsuID) {
+        if(attempt < 5) {
+          setAttempt(attempt+1)
+          alert(`Login failed. Attempt: ${attempt}`)
+        } else {
+          golock()
+        }
+      }
+      else {
+        cvsuidholder = cvsuID
+        setAttempt(attempt+1)
+        setLock(false)
       }
       
    }
@@ -44,57 +60,66 @@ function Home() {
     
     const checkCredentials = (e) => {
       e.preventDefault()
-      if (!cvsuID){
+      // IF BOTH IS EMPTY
+      if (!cvsuID && !password){
         setError_cvsuID("CvSU ID is required")
-        setLoading(false);
-      } else if (cvsuID.length < 4){
-        setError_cvsuID("CvSU ID must be at least 4 characters")
-        setLoading(false);
-      } else {
-        setError_cvsuID("")
-      }
-
-      if (!password){
         setError_password("Password is required")
         setLoading(false);
-      } else if (password.length < 4){
-        setError_password("Password must be at least 4 character")
-        setLoading(false);
-      } else {
+        // ELSE IF LENGTH OF CVSU ID IS LESS THAN FOUR
+      } 
+      else {
+        // REMOVE ERROR FOR CVSU ID
         setError_cvsuID("")
-        setError_password("")
-        login(e);
-        console.log(error_cvsuID, error_password)
-      }
-      
+        // IF PASSWORD IS EMPTY
+        if (!password){
+          setError_password("Password is required")
+          setLoading(false);
+            // ELSE IF LENGTH OF PASSWORD IS LESS THAN FOUR
+        } 
+        else {
+            // LOGIN ATTEMPT
+          setError_cvsuID("")
+          setError_password("")
+          login(e);
+        }
+      } 
     }
 
-    const login = (e) => {
+    const golock = async () => await api.post(`userlock/${cvsuID}`)
+
+    // need mag lock sa backend para wlaang butas.
+    const login = async (e) => {
       e.preventDefault();
       setLoading(true);
-      console.log(cvsuID+ " -> "+password)
-      console.log("try")
       //api 
-      api.post(`login`,{
+      await api.post(`login`,{
         cvsu_id: cvsuID,
         password: password
       })
       .then(response => {
+         // IF TRUE
         setLoading(false);
-        console.log(JSON.stringify(response.data))
-        alert('welcome!')
-        localStorage.setItem('cvsuID',cvsuID)
-        localStorage.setItem('userType',response.data)
-        localStorage.setItem('isAuthenticated', true);
-        console.log(localStorage.getItem('cvsuID'))
-        console.log(localStorage.getItem('userType'))
-        console.log(localStorage.getItem('isAuthenticated'))
-        window.location.href='/dashboard';
+        if (response.data.user_status === 1) { 
+          setError_password("Your account is temporary lock. please contact your admin")
+        }
+        else{
+          alert('welcome!')
+          localStorage.setItem('cvsuID',cvsuID)
+          localStorage.setItem('userType',response.data.user_type)
+          localStorage.setItem('isAuthenticated', true);
+          window.location.href='/dashboard';
+        }
+        
       })
       .catch((err) => 
       {
-        console.log(err)
-        alert("Incorrect CvSU ID / Pin")
+        console.log(err);
+        loginFailed(e)
+        if(lock){
+          setError_password("Your account is temporary lock. please contact your admin")
+        } else { 
+          setError_password("Incorrect CvSU ID / Password")
+        }
         setLoading(false);
         return
       })

@@ -9,19 +9,23 @@ import { Spinner } from 'react-bootstrap';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 import ResetModal from './ResetModal';
+import LockModal from './LockModal';
 // import { useFormState } from 'react-hook-form'
 
 function ManageUser() {
   //const cvsuID = localStorage.getItem('cvsuID') || ''
-  const [data, setData] = useState([]);
-  let [update, setUpdate] = useState({});
-  let [del, setDel] = useState({});
-  let [rst, setRst] = useState({});
+  const [data, setData] = useState([])
+  let [update, setUpdate] = useState({})
+  let [del, setDel] = useState({})
+  let [rst, setRst] = useState({})
+  let [lck, setLck] = useState({})
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDel, setShowDel] = useState(false);
   const [showEdt, setShowEdt] = useState(false);
   const [showRst, setShowRst] = useState(false);
+  const [showLck, setShowLck] = useState(false);
+  const [lock,setLock] = useState(localStorage.getItem("lock") || false);
 
   const search = (e) => {
     setSearchTerm(e.target.value);
@@ -71,6 +75,22 @@ function ManageUser() {
             >
               <i className="fa fa-user-lock" title="Reset Password" />
             </button>
+            <button
+              className="btn btn-light btn-sm"
+              type="button"
+              style={{ width: 40, height: 30, marginLeft: 10 }}
+              title="Reset Password"
+              onClick={() => showLock(user)}
+            >
+              <>
+                {/*user.lock = 0 or 1 */}
+                {(user.user_status === 1) ? 
+                <i className="fa fa-lock" title="Unlock Account" />
+                :
+                <i className="fa fa-unlock" title="Lock Account" />
+                }
+              </>
+            </button>
           </td>
         </tr>
       )
@@ -81,6 +101,7 @@ function ManageUser() {
     setShowDel(false)
     setShowEdt(false)
     setShowRst(false)
+    setShowLck(false)
   }
   
   const showEdit = (id) => {
@@ -98,6 +119,11 @@ function ManageUser() {
     setShowRst(true)
   }
 
+  const showLock = (id) => {
+    setLck(id)
+    setShowLck(true)
+  }
+
   const handleEdit = () => {
     //LOGIC
     alert("User update successfully");
@@ -113,7 +139,20 @@ function ManageUser() {
   const handleReset = () => {
     //LOGIC
     alert("Password reset successfully");
-    setShowDel(false);
+    setShowRst(false);
+  }
+
+  const handleLock = () => {
+    //LOGIC
+    alert("Success!!");
+    if (!lock) {
+      localStorage.setItem("lock",true)
+      setLock(localStorage.setItem("lock",true))
+    } else {
+      localStorage.setItem("lock",false)
+      setLock(localStorage.setItem("lock",false))
+    }
+    setShowLck(false)
   }
 
   useEffect(() => {
@@ -131,6 +170,7 @@ function ManageUser() {
       })
     }
     retrieve()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
@@ -227,7 +267,8 @@ function ManageUser() {
     </div>
     <EditModal show={showEdt} handleEdit={handleEdit} handleClose={handleClose} id={update}/>   
     <DeleteModal show={showDel} handleDelete={handleDelete} handleClose={handleClose} del={del}/>   
-    <ResetModal show={showRst} handleReset={handleReset} handleClose={handleClose} res={rst}/>           
+    <ResetModal show={showRst} handleReset={handleReset} handleClose={handleClose} res={rst}/>       
+    <LockModal show={showLck} handleLock={handleLock} handleClose={handleClose} lck={lck}/>     
   </div>
       )
   }

@@ -37,7 +37,7 @@
 .sidebar-header{
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: 14px;
 }
 
 .sidebar-items{
@@ -45,6 +45,9 @@
   align-items: center;
 }
 
+.nav-link:active{
+  background-color: #75a478;
+}
 .sidebar-items .item{
   display: flex;
   align-items: center;
@@ -84,6 +87,10 @@
   background-color: #75a478;
 }
 
+a .nav-link:focus{
+  background-color: #75a478;
+}
+
 .sidebar-logo img {
   display: block;
 }
@@ -105,12 +112,22 @@ footer {
 
 .Sidebar .sidebar-icon{
   margin-right: 0;
+  display: block;
+  align-items: center;
 }
 
 .Sidebar .sidebar-text,
 .Sidebar .sidebar-logo {
   display: none;
 }
-  
-  
+
+
+}
+
+ul li {
+  list-style: none;
+}
+
+ul li a {
+  text-decoration: none;
 }

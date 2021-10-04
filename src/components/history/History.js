@@ -20,6 +20,7 @@ function History() {
     };
     
     const renderTable = () => {
+      // eslint-disable-next-line array-callback-return
       return data.filter((user) => {
         if (!startDate) {
           return user
@@ -49,6 +50,7 @@ function History() {
         })
       }
       load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     
     return (
@@ -95,8 +97,9 @@ function History() {
                     selected={startDate}
                     onChange={(date) => handleDate(date)}
                     dateFormat="yyyy-MM-dd"
-                    className="form-control form-control-sm text-black icon-input-left"
-                    isClearable
+                    className="form-control form-control-sm text-black bg-black icon-input-left change-icon"
+                    closeOnScroll={true}
+                    
                   />
                 <span className="date-picker-icon">
                   <i class="fas fa-calendar"/>
