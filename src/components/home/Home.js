@@ -2,7 +2,6 @@ import React, { useState }from 'react'
 import * as ReactBootstrap from 'react-bootstrap'
 import api from '../../api/axios'
 var cvsuidholder = '';
-var templock = false;
 
 
 function Home() {
@@ -34,12 +33,12 @@ function Home() {
 
    // LOGIN ATTEMPT (UP TO 5 ATTEMPTS)
    const loginFailed = () => {
-      if (cvsuidholder == '') {
+      if (cvsuidholder === '') {
         setAttempt(attempt+1)
         cvsuidholder = cvsuID
         setLock(false)
       }
-      else if (cvsuidholder == cvsuID) {
+      else if (cvsuidholder === cvsuID) {
         if(attempt < 5) {
           setAttempt(attempt+1)
           alert(`Login failed. Attempt: ${attempt}`)
@@ -100,7 +99,7 @@ function Home() {
       .then(response => {
          // IF TRUE
         setLoading(false);
-        if (response.data.user_status == 1) { 
+        if (response.data.user_status === 1) { 
           setError_password("Your account is temporary lock. please contact your admin")
         }
         else{

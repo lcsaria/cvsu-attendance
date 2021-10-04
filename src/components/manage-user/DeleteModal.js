@@ -9,7 +9,6 @@ function DeleteModal({show, handleClose, handleDelete, del}) {
     cvsu_id : localStorage.getItem('cvsuID'),
     password : ''
   })
-  const password = useState("");
   const [error, setError] = useState({
     password: ""
   });
