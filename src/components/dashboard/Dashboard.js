@@ -76,6 +76,7 @@ function Dashboard() {
     getUserTime()
     getTime()
     getnow()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
 
@@ -102,7 +103,7 @@ function Dashboard() {
       return
     }
     if (timecheck){
-
+      setLoading(true)
       await api.put(`attendance/${cvsuID}`)
       .then(response => {
         setTimeintxt("TIME IN")
@@ -190,6 +191,7 @@ return (
                     color: "rgb(255,255,255)",
                     fontSize: 40
                   }}
+                  disabled={loading}
                   onClick={timeInorOut}
                 >
                   {loading ? (

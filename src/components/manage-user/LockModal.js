@@ -28,7 +28,7 @@ const onLock = async () => {
     })
     .then(response =>{
       // lock or unlock user 
-      if (lck.user_status == 0) {
+      if (lck.user_status === 0) {
         api.post(`userlock/${lck.cvsu_id}`)
         .then(response =>{
           handleLock();
@@ -69,7 +69,7 @@ const onLock = async () => {
               centered>
             <Modal.Header closeButton>
               <Modal.Title>
-                {lck.user_status == 0 ? "Lock" : "Unlock"} {lck.userinfo_fname + " " + lck.userinfo_lname}?
+                {lck.user_status === 0 ? "Lock" : "Unlock"} {lck.userinfo_fname + " " + lck.userinfo_lname}?
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>

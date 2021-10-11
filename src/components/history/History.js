@@ -20,6 +20,7 @@ function History() {
     };
     
     const renderTable = () => {
+      // eslint-disable-next-line array-callback-return
       return data.filter((user) => {
         if (!startDate) {
           return user
@@ -49,6 +50,7 @@ function History() {
         })
       }
       load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     
     return (
