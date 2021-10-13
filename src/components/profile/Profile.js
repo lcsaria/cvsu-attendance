@@ -178,19 +178,6 @@ function Profile() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-  useEffect(() => {
-    const retrievedata = async () => {
-      const response = await api.get(cvsuID).catch((err) => {
-        console.log('error : ', err)
-      })
-      if (response && response.data) {
-        setUserData(response.data)
-      }
-    }
-    retrievedata()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-
   return (
   <div id="wrapper">
     {

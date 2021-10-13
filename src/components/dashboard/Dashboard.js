@@ -60,6 +60,7 @@ function Dashboard() {
       if (response && response.data)
       {
         setUserData(response.data)
+        console.log(response.data);
       }
     }
     console.log(userData);
@@ -213,9 +214,9 @@ return (
           <div className="col-md-6">
             <div className="card" style={{ boxShadow: "-3px 4px 10px" }}>
               <div className="card-body" style={{ boxShadow: "0px 0px" }}>
-                <h3>Time in : {userData ? userData.timein : '--:--'}</h3>
+                <h3>Time in : {userData.timein ? userData.timein : '--:--'}</h3>
                 <hr />
-                <h3>Time out : {userData ? userData.timeout : '--:--'}</h3>
+                <h3>Time out : {userData.timeout ? userData.timeout : '--:--'}</h3>
               </div>
             </div>
           </div>
